@@ -1,10 +1,12 @@
 import React, { useState } from "react";
-import { Drawer, IconButton } from "@mui/material";
 import {
   StyledWrapper,
   StyledWrapperTypography,
   StyledWrapperList,
   ButtonMinimizeMenu,
+  StyledDrawer,
+  ContentWrapper,
+  StyledIconButton,
 } from "./PersonalFinanceApp.styles";
 import { Budgets } from "../components/Budgets/Budgets.tsx";
 import { Transactions } from "../components/Transactions/Transactions.tsx";
@@ -40,12 +42,25 @@ const menuItems = {
   },
 };
 
+const LogoImg = ({ size }) => (
+  <img src={`${process.env.PUBLIC_URL}/images/logo-${size}.svg`} alt="Logo" />
+);
+
+const IconCaretImg = ({ direction }) => (
+  <img
+    src={`${process.env.PUBLIC_URL}/images/icon-caret-${direction}.svg`}
+    alt={`Caret ${direction}`}
+  />
+);
+
 const PersonalFinanceApp = () => {
   const [open, setOpen] = useState(true);
-  const [selectedComponent, setSelectedComponent] = useState("overview");
+  const [selectedComponent, setSelectedComponent] = useState(
+    "overview" as string
+  );
 
   const toggleMenu = () => {
-    setOpen(!open);
+    setOpen((prevOpen) => !prevOpen);
   };
 
   const handleItemClick = (component: string) => {
@@ -66,35 +81,9 @@ const PersonalFinanceApp = () => {
 
   return (
     <StyledWrapper>
-      <Drawer
-        sx={{
-          width: open ? 0 : 60,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: open ? 250 : 100,
-            transition: "width 0.3s",
-            backgroundColor: "#201F24",
-            borderTopRightRadius: "15px",
-            borderBottomRightRadius: "15px",
-            color: "#fff",
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={true}
-      >
+      <StyledDrawer variant="persistent" anchor="left" open={open}>
         <StyledWrapperTypography>
-          {open ? (
-            <img
-              src={`${process.env.PUBLIC_URL}/images/logo-large.svg`}
-              alt="Logo"
-            />
-          ) : (
-            <img
-              src={`${process.env.PUBLIC_URL}/images/logo-small.svg`}
-              alt="Logo"
-            />
-          )}
+          {open ? <LogoImg size={"large"} /> : <LogoImg size={"small"} />}
         </StyledWrapperTypography>
 
         <StyledWrapperList>
@@ -115,43 +104,23 @@ const PersonalFinanceApp = () => {
           })}
         </StyledWrapperList>
 
-        <IconButton
-          onClick={toggleMenu}
-          style={{
-            position: "absolute",
-            bottom: 20,
-            left: "50%",
-            transform: "translateX(-50%)",
-          }}
-        >
+        <StyledIconButton onClick={toggleMenu}>
           {open ? (
             <ButtonMinimizeMenu>
-              <img
-                src={`${process.env.PUBLIC_URL}/images/icon-caret-left.svg`}
-                alt="Caret left"
-              />
+              <IconCaretImg direction={"left"} />
               Minimize Menu
             </ButtonMinimizeMenu>
           ) : (
             <ButtonMinimizeMenu>
-              <img
-                src={`${process.env.PUBLIC_URL}/images/icon-caret-right.svg`}
-                alt="Caret right"
-              />
+              <IconCaretImg direction={"right"} />
             </ButtonMinimizeMenu>
           )}
-        </IconButton>
-      </Drawer>
+        </StyledIconButton>
+      </StyledDrawer>
 
-      <div
-        style={{
-          marginLeft: open ? 240 : 80,
-          padding: "20px",
-          flexGrow: 1,
-        }}
-      >
-        {SelectedComponent && <SelectedComponent />}
-      </div>
+      <ContentWrapper>
+        <SelectedComponent />
+      </ContentWrapper>
     </StyledWrapper>
   );
 };

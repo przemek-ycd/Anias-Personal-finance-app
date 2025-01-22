@@ -1,3 +1,4 @@
+import { Drawer, IconButton } from "@mui/material";
 import styled from 'styled-components';
 
 export const StyledWrapper = styled.div `
@@ -47,3 +48,28 @@ export const StyledWrapperList = styled.div `
         }
     }
 `;
+
+export const StyledDrawer = styled(Drawer)`
+    & .MuiDrawer-paper {
+        width: ${(props) => (props.open ? "250px" : "100px")};
+        transition: width 0.3s;
+        background-color: #201f24;
+        border-top-right-radius: 15px;
+        border-bottom-right-radius: 15px;
+        color: #fff;
+        visibility: visible !important;
+        transform: translateX(0) !important; 
+    }
+`;
+
+export const ContentWrapper = styled.div`
+    margin-left: ${(props) => (props.open ? "240px" : "80px")};
+    padding: 20px;
+    flex-grow: 1;
+`
+;
+
+export const StyledIconButton = styled(IconButton)`
+    margin-top: 2rem;
+`
+;
