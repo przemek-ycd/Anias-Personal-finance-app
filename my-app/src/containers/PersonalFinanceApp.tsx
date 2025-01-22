@@ -53,11 +53,17 @@ const IconCaretImg = ({ direction }) => (
   />
 );
 
+type SelectedComponent =
+  | "overview"
+  | "transactions"
+  | "budgets"
+  | "pots"
+  | "recurringBills";
+
 const PersonalFinanceApp = () => {
   const [open, setOpen] = useState(true);
-  const [selectedComponent, setSelectedComponent] = useState(
-    "overview" as string
-  );
+  const [selectedComponent, setSelectedComponent] =
+    useState<SelectedComponent>("overview");
 
   const toggleMenu = () => {
     setOpen((prevOpen) => !prevOpen);
