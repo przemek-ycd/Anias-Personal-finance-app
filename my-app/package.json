@@ -10,10 +10,12 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
+    "@types/react": "^19.0.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-redux": "^9.2.0",
     "react-scripts": "5.0.1",
+    "recharts": "^2.15.0",
     "styled-components": "^6.1.14",
     "web-vitals": "^2.1.0"
   },

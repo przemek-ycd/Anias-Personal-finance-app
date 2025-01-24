@@ -124,7 +124,7 @@ const PersonalFinanceApp = () => {
         </StyledIconButton>
       </StyledDrawer>
 
-      <ContentWrapper>
+      <ContentWrapper open={open}>
         <SelectedComponent />
       </ContentWrapper>
     </StyledWrapper>
