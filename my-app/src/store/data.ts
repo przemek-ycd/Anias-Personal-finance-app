@@ -136,5 +136,11 @@ export const getSummaryRecurringBillsData = (state: DataState) => {
   ];
 };
 
+export const selectUniqueCategoriesTransactions = (state: DataState) => {
+  return Array.from(
+    new Set(state.transactions.map((transaction) => transaction.category))
+  );
+};
+
 export const { loadData, loadDataSuccess, loadDataError } = dataSlice.actions;
 export default dataSlice.reducer;
