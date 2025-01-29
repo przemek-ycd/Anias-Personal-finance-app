@@ -1,30 +1,20 @@
 import React, { FC } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
 import { StyledWrapperChartItems, ParagraphAmount } from "./Chart.styles";
 
 interface ChartItemsProps {
   category: string;
   theme: string;
   maximum: React.ReactNode;
+  spentMoneyValue: number;
 }
 
 export const ChartItems: FC<ChartItemsProps> = ({
   category,
   maximum,
   theme,
+  spentMoneyValue,
 }) => {
-  const { transactions } = useSelector((state: RootState) => state.data);
-
-  const filteredTransactions = transactions
-    .filter((transaction) => transaction.category === category)
-    .slice(0, 3);
-
-  const spentMoneyValue = filteredTransactions
-    .map((transaction) => Math.abs(transaction.amount))
-    .reduce((sum, amount) => sum + amount, 0);
-
   return (
     <StyledWrapperChartItems>
       <p style={{ borderLeft: `3px solid ${theme}` }}>{category}</p>
@@ -36,27 +26,11 @@ export const ChartItems: FC<ChartItemsProps> = ({
   );
 };
 
-export const Chart: React.FC = () => {
-  const { transactions, budgets } = useSelector(
-    (state: RootState) => state.data
-  );
+interface ChartProps {
+  chartData: ChartItemsProps[];
+}
 
-  const chartData = budgets.map((budget) => {
-    const filteredTransactions = transactions
-      .filter((transaction) => transaction.category === budget.category)
-      .slice(0, 3);
-
-    const spentMoneyValue = filteredTransactions
-      .map((transaction) => Math.abs(transaction.amount))
-      .reduce((sum, amount) => sum + amount, 0);
-
-    return {
-      name: budget.category,
-      value: spentMoneyValue,
-      theme: budget.theme,
-    };
-  });
-
+export const Chart: React.FC<ChartProps> = ({ chartData }) => {
   return (
     <ResponsiveContainer width="100%" height={250}>
       <PieChart>

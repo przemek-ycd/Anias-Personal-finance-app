@@ -136,5 +136,28 @@ export const getSummaryRecurringBillsData = (state: DataState) => {
   ];
 };
 
+export const selectFilteredTransactionsByCategory = (
+  state: DataState,
+  category: string
+) => {
+  return state.transactions
+    .filter((transaction) => transaction.category === category)
+    .slice(0, 3);
+};
+
+export const calculateTotalSpentInCategory = (
+  state: DataState,
+  category: string
+) => {
+  const filteredTransactions = selectFilteredTransactionsByCategory(
+    state,
+    category
+  );
+
+  return filteredTransactions
+    .map((transaction) => Math.abs(transaction.amount))
+    .reduce((sum, amount) => sum + amount, 0);
+};
+
 export const { loadData, loadDataSuccess, loadDataError } = dataSlice.actions;
 export default dataSlice.reducer;

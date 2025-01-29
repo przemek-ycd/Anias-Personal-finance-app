@@ -28,6 +28,7 @@ import { Budgets } from "../Budgets/Budgets.tsx";
 import { Transactions } from "../Transactions/Transactions.tsx";
 import { RecurringBills } from "../RecurringBills/RecurringBills.tsx";
 import { Pots } from "../Pots/Pots.tsx";
+import { calculateTotalSpentInCategory } from "../../store/data.ts";
 
 interface SectionHeaderItemProps {
   title: string;
@@ -66,10 +67,25 @@ export const Overview: FC = () => {
     getSummaryRecurringBillsData(state.data)
   );
 
+  const dataState = useSelector((state: RootState) => state.data);
+
   const postSlice = pots.slice(0, 4);
   const totalSaveValue = pots.reduce((sum, pot) => sum + pot.total, 0);
 
   const transactionsSlice = transactions.slice(0, 5);
+
+  const chartData = budgets.map((budget) => {
+    const spentMoneyValue = calculateTotalSpentInCategory(
+      dataState,
+      budget.category
+    );
+
+    return {
+      name: budget.category,
+      value: spentMoneyValue,
+      theme: budget.theme,
+    };
+  });
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error loading data.</p>;
@@ -141,12 +157,17 @@ export const Overview: FC = () => {
               onClick={() => setActiveView("budgets")}
             />
             <BudgetAmountWrapper>
-              <Chart />
+              <Chart chartData={chartData} />
               <div>
                 {budgets.map((budget) => (
                   <ChartItems
+                    key={budget.category}
                     category={budget.category}
                     theme={budget.theme}
+                    spentMoneyValue={calculateTotalSpentInCategory(
+                      dataState,
+                      budget.category
+                    )}
                     maximum={""}
                   />
                 ))}
