@@ -91,6 +91,10 @@ export const Overview: FC = () => {
     });
   }, [budgets, dataState]);
 
+  const capitalizeFirstChar = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
+
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error loading data.</p>;
 
@@ -105,7 +109,7 @@ export const Overview: FC = () => {
       <StyledWrapperSummary>
         {Object.entries(balance).map(([key, value]) => (
           <StyledWrapperSummaryItem key={key}>
-            <p>{key.charAt(0).toUpperCase() + key.slice(1)}</p>
+            <p>{capitalizeFirstChar(key)}</p>
             <p>${value.toFixed(2)}</p>
           </StyledWrapperSummaryItem>
         ))}
