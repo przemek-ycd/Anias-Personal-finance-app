@@ -71,7 +71,7 @@ export const Overview: FC = () => {
 
   const dataState = useSelector((state: RootState) => state.data);
 
-  const postSlice = pots.slice(0, 4);
+  const potsSlice = pots.slice(0, 4);
   const totalSaveValue = pots.reduce((sum, pot) => sum + pot.total, 0);
 
   const transactionsSlice = transactions.slice(0, 5);
@@ -118,8 +118,8 @@ export const Overview: FC = () => {
         <StyledLeftSide>
           <StyledWrapperPotsSection>
             <SectionHeaderItem
-              title={"Pots"}
-              buttonText={"See details"}
+              title="Pots"
+              buttonText="See details"
               onClick={() => setActiveView("pots")}
             />
             <StyledWrapperPotsSummary>
@@ -138,7 +138,7 @@ export const Overview: FC = () => {
                 </ParagraphTotalSavedWrapper>
               </StyledWrapperTotalSaved>
               <PotsListWrapper>
-                {postSlice.map((pot) => (
+                {potsSlice.map((pot) => (
                   <div key={pot.name}>
                     <p>{pot.name}</p>
                     <p>${pot.total.toFixed(2)}</p>
@@ -176,7 +176,6 @@ export const Overview: FC = () => {
                       dataState,
                       budget.category
                     )}
-                    maximum={""}
                   />
                 ))}
               </div>

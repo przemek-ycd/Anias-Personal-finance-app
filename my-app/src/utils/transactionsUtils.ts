@@ -2,9 +2,7 @@ import { DataState } from "../store/data";
 
 const getRecurringBills = (state: DataState) => {
   return Array.from(
-    new Set(
-      state.transactions.filter((transaction) => transaction.recurring === true)
-    )
+    new Set(state.transactions.filter((transaction) => transaction.recurring))
   );
 };
 

@@ -7,9 +7,9 @@ import {
 
 interface Transaction {
   name: string;
-  avatar: string;
+  avatarUrl: string;
   amount: number;
-  date: string;
+  date: Date;
 }
 
 interface TransactionTableProps {
@@ -41,7 +41,7 @@ export const TransactionTable: FC<TransactionTableProps> = ({
         >
           <TransactionsNameWrapper>
             <img
-              src={`${process.env.PUBLIC_URL}/${transaction.avatar}`}
+              src={`${process.env.PUBLIC_URL}/${transaction.avatarUrl}`}
               alt={transaction.name}
             />
             <p>{transaction.name}</p>

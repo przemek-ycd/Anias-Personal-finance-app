@@ -5,13 +5,11 @@ import { StyledWrapperChartItems, ParagraphAmount } from "./Chart.styles";
 interface ChartItemsProps {
   category: string;
   theme: string;
-  maximum: React.ReactNode;
   spentMoneyValue: number;
 }
 
 export const ChartItems: FC<ChartItemsProps> = ({
   category,
-  maximum,
   theme,
   spentMoneyValue,
 }) => {
@@ -20,7 +18,6 @@ export const ChartItems: FC<ChartItemsProps> = ({
       <p style={{ borderLeft: `3px solid ${theme}` }}>{category}</p>
       <ParagraphAmount>
         <p>${spentMoneyValue}</p>
-        {maximum}
       </ParagraphAmount>
     </StyledWrapperChartItems>
   );
