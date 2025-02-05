@@ -18,15 +18,15 @@ import {
   StyledWrapperTransactionsSection,
   StyledWrapperBillsSection,
   BillsInfoWrapper,
-} from "./Overview.styles";
+} from "./Overview.styles.js";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
-import { TransactionTable } from "../TransactionTable/TransactionTable.tsx";
-import { Chart, ChartItems } from "../Chart/Chart.tsx";
-import { Budgets } from "../Budgets/Budgets.tsx";
-import { Transactions } from "../Transactions/Transactions.tsx";
-import { RecurringBills } from "../RecurringBills/RecurringBills.tsx";
-import { Pots } from "../Pots/Pots.tsx";
+import { RootState } from "../../store/store.ts";
+import { TransactionTable } from "../../components/TransactionTable/TransactionTable.tsx";
+import { Chart, ChartItems } from "../../components/Chart/Chart.tsx";
+import { Budgets } from "../../components/Budgets/Budgets.tsx";
+import { Transactions } from "../../components/Transactions/Transactions.tsx";
+import { RecurringBills } from "../../components/RecurringBills/RecurringBills.tsx";
+import { Pots } from "../../components/Pots/Pots.tsx";
 import {
   calculateTotalSpentInCategory,
   getSummaryRecurringBillsData,
