@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useMemo } from "react";
 import {
   StyledWrapper,
   StyledWrapperSummary,
@@ -76,18 +76,20 @@ export const Overview: FC = () => {
 
   const transactionsSlice = transactions.slice(0, 5);
 
-  const chartData = budgets.map((budget) => {
-    const spentMoneyValue = calculateTotalSpentInCategory(
-      dataState,
-      budget.category
-    );
+  const chartData = useMemo(() => {
+    return budgets.map((budget) => {
+      const spentMoneyValue = calculateTotalSpentInCategory(
+        dataState,
+        budget.category
+      );
 
-    return {
-      name: budget.category,
-      value: spentMoneyValue,
-      theme: budget.theme,
-    };
-  });
+      return {
+        name: budget.category,
+        value: spentMoneyValue,
+        theme: budget.theme,
+      };
+    });
+  }, [budgets, dataState]);
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error loading data.</p>;
