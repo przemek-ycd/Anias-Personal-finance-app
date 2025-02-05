@@ -43,8 +43,11 @@ export const Chart: React.FC<ChartProps> = ({ chartData }) => {
           outerRadius={100}
           fill="#8884d8"
         >
-          {chartData.map((entry, index) => (
-            <Cell key={`cell-${index}`} fill={entry.theme} />
+          {chartData.map((entry) => (
+            <Cell
+              key={`cell-${entry.category}-${entry.theme}-${entry.spentMoneyValue}`}
+              fill={entry.theme}
+            />
           ))}
         </Pie>
         <Tooltip />

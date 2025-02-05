@@ -190,8 +190,8 @@ export const Overview: FC = () => {
               onClick={() => setActiveView("recurringBills")}
             />
             <BillsInfoWrapper>
-              {summaryItemsRecurringBillsData.map((item, index) => (
-                <div key={index}>
+              {summaryItemsRecurringBillsData.map((item) => (
+                <div key={`${item.title}-${item.content}`}>
                   <p>{item.title}</p>
                   <p>{item.content}</p>
                 </div>

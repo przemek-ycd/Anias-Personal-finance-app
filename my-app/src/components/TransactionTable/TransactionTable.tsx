@@ -36,7 +36,9 @@ export const TransactionTable: FC<TransactionTableProps> = ({
   return (
     <>
       {filteredTransactions.map((transaction) => (
-        <StyledWrapperTransactionsDetails key={transaction.name}>
+        <StyledWrapperTransactionsDetails
+          key={`${transaction.name}-${transaction.date}-${transaction.amount}`}
+        >
           <TransactionsNameWrapper>
             <img
               src={`${process.env.PUBLIC_URL}/${transaction.avatar}`}
