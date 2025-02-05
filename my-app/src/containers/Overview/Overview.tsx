@@ -86,7 +86,7 @@ export const Overview: FC = () => {
       return {
         name: budget.category,
         value: spentMoneyValue,
-        theme: budget.theme,
+        color: budget.theme,
       };
     });
   }, [budgets, dataState]);
@@ -171,7 +171,7 @@ export const Overview: FC = () => {
                   <ChartItems
                     key={budget.category}
                     category={budget.category}
-                    theme={budget.theme}
+                    color={budget.theme}
                     spentMoneyValue={calculateTotalSpentInCategory(
                       dataState,
                       budget.category

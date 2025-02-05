@@ -4,18 +4,18 @@ import { StyledWrapperChartItems, ParagraphAmount } from "./Chart.styles";
 
 interface ChartItemsProps {
   category: string;
-  theme: string;
+  color: string;
   spentMoneyValue: number;
 }
 
 export const ChartItems: FC<ChartItemsProps> = ({
   category,
-  theme,
+  color,
   spentMoneyValue,
 }) => {
   return (
     <StyledWrapperChartItems>
-      <p style={{ borderLeft: `3px solid ${theme}` }}>{category}</p>
+      <p style={{ borderLeft: `3px solid ${color}` }}>{category}</p>
       <ParagraphAmount>
         <p>${spentMoneyValue}</p>
       </ParagraphAmount>
@@ -42,8 +42,8 @@ export const Chart: React.FC<ChartProps> = ({ chartData }) => {
         >
           {chartData.map((entry) => (
             <Cell
-              key={`cell-${entry.category}-${entry.theme}-${entry.spentMoneyValue}`}
-              fill={entry.theme}
+              key={`cell-${entry.category}-${entry.color}-${entry.spentMoneyValue}`}
+              fill={entry.color}
             />
           ))}
         </Pie>
