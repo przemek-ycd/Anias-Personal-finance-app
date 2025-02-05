@@ -23,12 +23,14 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { TransactionTable } from "../TransactionTable/TransactionTable.tsx";
 import { Chart, ChartItems } from "../Chart/Chart.tsx";
-import { getSummaryRecurringBillsData } from "../../store/data.ts";
 import { Budgets } from "../Budgets/Budgets.tsx";
 import { Transactions } from "../Transactions/Transactions.tsx";
 import { RecurringBills } from "../RecurringBills/RecurringBills.tsx";
 import { Pots } from "../Pots/Pots.tsx";
-import { calculateTotalSpentInCategory } from "../../store/data.ts";
+import {
+  calculateTotalSpentInCategory,
+  getSummaryRecurringBillsData,
+} from "../../utils/transactionsUtils.ts";
 
 interface SectionHeaderItemProps {
   title: string;
