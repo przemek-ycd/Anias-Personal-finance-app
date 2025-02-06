@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { selectUniqueCategoriesTransactions } from "../../store/data.ts";
+import { selectUniqueCategoriesTransactions } from "../../utils/transactionsUtils.ts";
 import { SelectSortBy } from "../SelectSortBy/SelectSortBy.tsx";
 import { InputSearch } from "../InputSearch/InputSearch.tsx";
 
