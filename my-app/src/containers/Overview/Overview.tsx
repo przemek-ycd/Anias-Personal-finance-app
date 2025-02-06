@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useMemo } from "react";
 import {
   StyledWrapper,
   StyledWrapperSummary,
@@ -18,16 +18,19 @@ import {
   StyledWrapperTransactionsSection,
   StyledWrapperBillsSection,
   BillsInfoWrapper,
-} from "./Overview.styles";
+} from "./Overview.styles.js";
 import { useSelector } from "react-redux";
-import { RootState } from "../../store/store";
-import { TransactionTable } from "../TransactionTable/TransactionTable.tsx";
-import { Chart, ChartItems } from "../Chart/Chart.tsx";
-import { getSummaryRecurringBillsData } from "../../store/data.ts";
-import { Budgets } from "../Budgets/Budgets.tsx";
-import { Transactions } from "../Transactions/Transactions.tsx";
-import { RecurringBills } from "../RecurringBills/RecurringBills.tsx";
-import { Pots } from "../Pots/Pots.tsx";
+import { RootState } from "../../store/store.ts";
+import { TransactionTable } from "../../components/TransactionTable/TransactionTable.tsx";
+import { Chart, ChartItems } from "../../components/Chart/Chart.tsx";
+import { Budgets } from "../../components/Budgets/Budgets.tsx";
+import { Transactions } from "../../components/Transactions/Transactions.tsx";
+import { RecurringBills } from "../../components/RecurringBills/RecurringBills.tsx";
+import { Pots } from "../../components/Pots/Pots.tsx";
+import {
+  calculateTotalSpentInCategory,
+  getSummaryRecurringBillsData,
+} from "../../utils/transactionsUtils.ts";
 
 interface SectionHeaderItemProps {
   title: string;
@@ -66,10 +69,31 @@ export const Overview: FC = () => {
     getSummaryRecurringBillsData(state.data)
   );
 
-  const postSlice = pots.slice(0, 4);
+  const dataState = useSelector((state: RootState) => state.data);
+
+  const potsSlice = pots.slice(0, 4);
   const totalSaveValue = pots.reduce((sum, pot) => sum + pot.total, 0);
 
   const transactionsSlice = transactions.slice(0, 5);
+
+  const chartData = useMemo(() => {
+    return budgets.map((budget) => {
+      const spentMoneyValue = calculateTotalSpentInCategory(
+        dataState,
+        budget.category
+      );
+
+      return {
+        name: budget.category,
+        value: spentMoneyValue,
+        color: budget.theme,
+      };
+    });
+  }, [budgets, dataState]);
+
+  const capitalizeFirstChar = (str) => {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  };
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error loading data.</p>;
@@ -85,7 +109,7 @@ export const Overview: FC = () => {
       <StyledWrapperSummary>
         {Object.entries(balance).map(([key, value]) => (
           <StyledWrapperSummaryItem key={key}>
-            <p>{key.charAt(0).toUpperCase() + key.slice(1)}</p>
+            <p>{capitalizeFirstChar(key)}</p>
             <p>${value.toFixed(2)}</p>
           </StyledWrapperSummaryItem>
         ))}
@@ -94,8 +118,8 @@ export const Overview: FC = () => {
         <StyledLeftSide>
           <StyledWrapperPotsSection>
             <SectionHeaderItem
-              title={"Pots"}
-              buttonText={"See details"}
+              title="Pots"
+              buttonText="See details"
               onClick={() => setActiveView("pots")}
             />
             <StyledWrapperPotsSummary>
@@ -114,7 +138,7 @@ export const Overview: FC = () => {
                 </ParagraphTotalSavedWrapper>
               </StyledWrapperTotalSaved>
               <PotsListWrapper>
-                {postSlice.map((pot) => (
+                {potsSlice.map((pot) => (
                   <div key={pot.name}>
                     <p>{pot.name}</p>
                     <p>${pot.total.toFixed(2)}</p>
@@ -141,13 +165,17 @@ export const Overview: FC = () => {
               onClick={() => setActiveView("budgets")}
             />
             <BudgetAmountWrapper>
-              <Chart />
+              <Chart chartData={chartData} />
               <div>
                 {budgets.map((budget) => (
                   <ChartItems
+                    key={budget.category}
                     category={budget.category}
-                    theme={budget.theme}
-                    maximum={""}
+                    color={budget.theme}
+                    spentMoneyValue={calculateTotalSpentInCategory(
+                      dataState,
+                      budget.category
+                    )}
                   />
                 ))}
               </div>
@@ -161,8 +189,8 @@ export const Overview: FC = () => {
               onClick={() => setActiveView("recurringBills")}
             />
             <BillsInfoWrapper>
-              {summaryItemsRecurringBillsData.map((item, index) => (
-                <div key={index}>
+              {summaryItemsRecurringBillsData.map((item) => (
+                <div key={`${item.title}-${item.content}`}>
                   <p>{item.title}</p>
                   <p>{item.content}</p>
                 </div>

@@ -7,12 +7,12 @@ import {
   StyledDrawer,
   ContentWrapper,
   StyledIconButton,
-} from "./PersonalFinanceApp.styles";
-import { Budgets } from "../components/Budgets/Budgets.tsx";
-import { Transactions } from "../components/Transactions/Transactions.tsx";
-import { RecurringBills } from "../components/RecurringBills/RecurringBills.tsx";
-import { Overview } from "../components/Overview/Overview.tsx";
-import { Pots } from "../components/Pots/Pots.tsx";
+} from "./PersonalFinanceApp.styles.js";
+import { Budgets } from "../../components/Budgets/Budgets.tsx";
+import { Transactions } from "../../components/Transactions/Transactions.tsx";
+import { RecurringBills } from "../../components/RecurringBills/RecurringBills.tsx";
+import { Overview } from "../Overview/Overview.tsx";
+import { Pots } from "../../components/Pots/Pots.tsx";
 
 const menuItems = {
   overview: {

@@ -7,9 +7,9 @@ import {
 
 interface Transaction {
   name: string;
-  avatar: string;
+  avatarUrl: string;
   amount: number;
-  date: string;
+  date: Date;
 }
 
 interface TransactionTableProps {
@@ -19,13 +19,29 @@ interface TransactionTableProps {
 export const TransactionTable: FC<TransactionTableProps> = ({
   filteredTransactions,
 }) => {
+  const formatTransactionAmount = (amount) => {
+    return amount > 0 ? `+$${amount}` : `-$${Math.abs(amount)}`;
+  };
+
+  const formatTransactionDate = (date) => {
+    return new Date(date)
+      .toLocaleDateString("en-US", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+      .replace(",", "");
+  };
+
   return (
     <>
       {filteredTransactions.map((transaction) => (
-        <StyledWrapperTransactionsDetails key={transaction.name}>
+        <StyledWrapperTransactionsDetails
+          key={`${transaction.name}-${transaction.date}-${transaction.amount}`}
+        >
           <TransactionsNameWrapper>
             <img
-              src={`${process.env.PUBLIC_URL}/${transaction.avatar}`}
+              src={`${process.env.PUBLIC_URL}/${transaction.avatarUrl}`}
               alt={transaction.name}
             />
             <p>{transaction.name}</p>
@@ -36,19 +52,9 @@ export const TransactionTable: FC<TransactionTableProps> = ({
                 color: transaction.amount < 0 ? "black" : "rgb(39, 124, 120)",
               }}
             >
-              {transaction.amount > 0
-                ? `+$${transaction.amount}`
-                : `-$${Math.abs(transaction.amount)}`}
+              {formatTransactionAmount(transaction.amount)}
             </p>
-            <p>
-              {new Date(transaction.date)
-                .toLocaleDateString("en-US", {
-                  day: "2-digit",
-                  month: "short",
-                  year: "numeric",
-                })
-                .replace(",", "")}
-            </p>
+            <p>{formatTransactionDate(transaction.date)}</p>
           </TransactionsAdditionalInfoWrapper>
         </StyledWrapperTransactionsDetails>
       ))}
