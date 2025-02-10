@@ -40,24 +40,34 @@ type SortOption =
   | "A to Z"
   | "Z to A";
 
-const sortFunctions = {
-  All: (transactions: TransactionsProps[]) => transactions,
-  Highest: (transactions: TransactionsProps[]) =>
+const sortMethods = {
+  all: (transactions: TransactionsProps[]) => transactions,
+  highest: (transactions: TransactionsProps[]) =>
     [...transactions].sort((a, b) => b.amount - a.amount),
-  Lowest: (transactions: TransactionsProps[]) =>
+  lowest: (transactions: TransactionsProps[]) =>
     [...transactions].sort((a, b) => a.amount - b.amount),
-  Oldest: (transactions: TransactionsProps[]) =>
+  oldest: (transactions: TransactionsProps[]) =>
     [...transactions].sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
     ),
-  Latest: (transactions: TransactionsProps[]) =>
+  latest: (transactions: TransactionsProps[]) =>
     [...transactions].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     ),
-  "A to Z": (transactions: TransactionsProps[]) =>
+  aToZ: (transactions: TransactionsProps[]) =>
     [...transactions].sort((a, b) => a.name.localeCompare(b.name)),
-  "Z to A": (transactions: TransactionsProps[]) =>
+  zToA: (transactions: TransactionsProps[]) =>
     [...transactions].sort((a, b) => b.name.localeCompare(a.name)),
+};
+
+const sortLabels = {
+  All: "All",
+  Highest: "Highest",
+  Lowest: "Lowest",
+  Oldest: "Oldest",
+  Latest: "Latest",
+  aToZ: "A to Z",
+  zToA: "Z to A",
 };
 
 export const Transactions: FC = () => {
@@ -91,7 +101,9 @@ export const Transactions: FC = () => {
     transaction.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const sortedTransactions = sortFunctions[selectedSort](filteredBySearch);
+  const sortedTransactions = useMemo(() => {
+    return sortMethods[selectedSort.toLowerCase()](filteredBySearch);
+  }, [selectedSort, filteredBySearch]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -115,7 +127,7 @@ export const Transactions: FC = () => {
             />
             <SelectSortBy
               label="Sort by"
-              selectOptions={Object.keys(sortFunctions)}
+              selectOptions={Object.values(sortLabels)}
               onChange={(value) => setSelectedSort(value as SortOption)}
             />
           </div>
