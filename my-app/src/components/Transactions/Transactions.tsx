@@ -31,6 +31,15 @@ interface TransactionsProps {
   recurring: boolean;
 }
 
+type SortOption =
+  | "All"
+  | "Highest"
+  | "Lowest"
+  | "Oldest"
+  | "Latest"
+  | "A to Z"
+  | "Z to A";
+
 const sortFunctions = {
   All: (transactions: TransactionsProps[]) => transactions,
   Highest: (transactions: TransactionsProps[]) =>
@@ -56,12 +65,14 @@ export const Transactions: FC = () => {
   const categoriesTransactions = useSelector((state: RootState) =>
     selectUniqueCategoriesTransactions(state.data)
   );
+  type CategoryOption = "All" | (typeof categoriesTransactions)[number];
 
   const [page, setPage] = useState<number>(0);
   const [rowsPerPage] = useState<number>(10);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [selectedSort, setSelectedSort] = useState<string>("All");
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const [selectedSort, setSelectedSort] = useState<SortOption>("All");
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategoryOption>("All");
 
   const itemsFrom = page * rowsPerPage;
   const itemsTo = itemsFrom + rowsPerPage;
@@ -105,7 +116,7 @@ export const Transactions: FC = () => {
             <SelectSortBy
               label="Sort by"
               selectOptions={Object.keys(sortFunctions)}
-              onChange={setSelectedSort}
+              onChange={(value) => setSelectedSort(value as SortOption)}
             />
           </div>
         </StyledWrapperDetailsHeader>

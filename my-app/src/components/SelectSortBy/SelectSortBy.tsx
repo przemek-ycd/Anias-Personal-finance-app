@@ -17,7 +17,7 @@ export const SelectSortBy: FC<SelectElementProps> = ({
   selectOptions,
   onChange,
 }) => {
-  const [selectedOption, setSelectedOption] = useState("All");
+  const [selectedOption, setSelectedOption] = useState<string>("All");
 
   const handleChange = (e) => {
     const value = e.target.value;
