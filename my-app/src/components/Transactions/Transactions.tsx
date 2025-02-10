@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useMemo } from "react";
 import {
   StyledWrapper,
   SectionHeader,
@@ -68,12 +68,13 @@ export const Transactions: FC = () => {
 
   const tableHeaders = ["Recipient", "Category", "Transaction Date", "Amount"];
 
-  const filteredByCategory =
-    selectedCategory === "All"
+  const filteredByCategory = useMemo(() => {
+    return selectedCategory === "All"
       ? transactions
       : transactions.filter(
           (transaction) => transaction.category === selectedCategory
         );
+  }, [transactions, selectedCategory]);
 
   const filteredBySearch = filteredByCategory.filter((transaction) =>
     transaction.name.toLowerCase().includes(searchTerm.toLowerCase())
