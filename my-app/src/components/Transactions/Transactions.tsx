@@ -4,7 +4,7 @@ import {
   SectionHeader,
   StyledWrapperDetails,
   StyledWrapperDetailsHeader,
-  WrapperImage,
+  ImageWrapper,
   StyledTableCell,
 } from "./Transactions.styles";
 import {
@@ -115,16 +115,16 @@ export const Transactions: FC = () => {
             <TableBody>
               {sortedTransactions
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((transaction, index) => (
-                  <TableRow key={index}>
+                .map((transaction) => (
+                  <TableRow key={transaction.name}>
                     <TableCell>
-                      <WrapperImage>
+                      <ImageWrapper>
                         <img
                           src={`${process.env.PUBLIC_URL}/${transaction.avatar}`}
                           alt={transaction.name}
                         />
                         <p>{transaction.name}</p>
-                      </WrapperImage>
+                      </ImageWrapper>
                     </TableCell>
                     <TableCell>{transaction.category}</TableCell>
                     <TableCell>

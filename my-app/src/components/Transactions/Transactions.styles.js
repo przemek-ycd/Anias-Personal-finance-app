@@ -27,7 +27,7 @@ export const StyledWrapperDetailsHeader = styled.div `
     }
 `
 
-export const WrapperImage = styled.div `
+export const ImageWrapper = styled.div `
     display: flex;
     align-items: center;
     text-align: center;

@@ -35,8 +35,8 @@ export const SelectSortBy: FC<SelectElementProps> = ({
         label={label}
         onChange={handleChange}
       >
-        {selectOptions.map((value, index) => (
-          <MenuItem key={index} value={value}>
+        {selectOptions.map((value) => (
+          <MenuItem key={value} value={value}>
             {value}
           </MenuItem>
         ))}
