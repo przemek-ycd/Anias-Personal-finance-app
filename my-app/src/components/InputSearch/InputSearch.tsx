@@ -1,9 +1,5 @@
 import React, { FC } from "react";
-import {
-  StyledFormControl,
-  StyledInputLabel,
-  StyledTextField,
-} from "./InputSearch.styles";
+import { StyledFormControl, StyledTextField } from "./InputSearch.styles";
 
 interface InputSearchProps {
   searchTerm: string;
@@ -17,9 +13,6 @@ export const InputSearch: FC<InputSearchProps> = ({ searchTerm, onChange }) => {
 
   return (
     <StyledFormControl>
-      <StyledInputLabel htmlFor="search-input" searchTerm={searchTerm}>
-        Search
-      </StyledInputLabel>
       <StyledTextField
         id="search-input"
         label="Search"

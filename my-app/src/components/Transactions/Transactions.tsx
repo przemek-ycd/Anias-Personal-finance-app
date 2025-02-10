@@ -90,21 +90,18 @@ export const Transactions: FC = () => {
       <StyledWrapperDetails>
         <StyledWrapperDetailsHeader>
           <div>
-            <InputSearch
-              searchTerm={searchTerm}
-              onChange={(value) => setSearchTerm(value)}
-            />
+            <InputSearch searchTerm={searchTerm} onChange={setSearchTerm} />
           </div>
           <div>
             <SelectSortBy
-              label={"Category"}
+              label="Category"
               selectOptions={["All", ...categoriesTransactions]}
-              onChange={(value) => setSelectedCategory(value)}
+              onChange={setSelectedCategory}
             />
             <SelectSortBy
-              label={"Sort by"}
+              label="Sort by"
               selectOptions={Object.keys(sortFunctions)}
-              onChange={(value) => setSelectedSort(value)}
+              onChange={setSelectedSort}
             />
           </div>
         </StyledWrapperDetailsHeader>

@@ -1,15 +1,8 @@
-import { FormControl, InputLabel, TextField } from "@mui/material";
+import { FormControl, TextField } from "@mui/material";
 import styled from "styled-components";
 
 export const StyledFormControl = styled(FormControl)`
     width: 100% !important;
-`
-
-export const StyledInputLabel = styled(InputLabel)`
-    &.css-19qnlrw-MuiFormLabel-root-MuiInputLabel-root {
-        display: ${({ searchTerm }) => (searchTerm ? "none" : "block")};
-        color: black !important;
-    }
 `
 
 export const StyledTextField = styled(TextField)`
