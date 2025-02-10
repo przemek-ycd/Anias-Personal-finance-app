@@ -63,6 +63,9 @@ export const Transactions: FC = () => {
   const [selectedSort, setSelectedSort] = useState<string>("All");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
+  const itemsFrom = page * rowsPerPage;
+  const itemsTo = itemsFrom + rowsPerPage;
+
   const tableHeaders = ["Recipient", "Category", "Transaction Date", "Amount"];
 
   const filteredByCategory =
@@ -114,7 +117,7 @@ export const Transactions: FC = () => {
             </TableHead>
             <TableBody>
               {sortedTransactions
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .slice(itemsFrom, itemsTo)
                 .map((transaction) => (
                   <TableRow key={transaction.name}>
                     <TableCell>
