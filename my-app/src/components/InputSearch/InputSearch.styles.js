@@ -6,14 +6,16 @@ export const StyledFormControl = styled(FormControl)`
 `
 
 export const StyledTextField = styled(TextField)`
-    &.css-113d811-MuiFormLabel-root-MuiInputLabel-root.Mui-focused {
-        color: black !important;
+    & label.Mui-focused {
+        color: black;
     }
-    &.css-1xp5r68-MuiFormControl-root-MuiTextField-root  {
+
+    & MuiFormControl.MuiTextField  {
         margin-bottom: 2rem;
     }
 
     & .MuiOutlinedInput-root {
+        margin-bottom: 2rem;
         &:hover .MuiOutlinedInput-notchedOutline: {
             border-color: black !important;
         },

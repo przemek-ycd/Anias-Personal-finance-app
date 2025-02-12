@@ -19,7 +19,7 @@ import {
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
 import { selectUniqueCategoriesTransactions } from "../../utils/transactionsUtils.ts";
-import { SelectSortBy } from "../SelectSortBy/SelectSortBy.tsx";
+import { SelectDropdown } from "../SelectDropdown/SelectDropdown.tsx";
 import { InputSearch } from "../InputSearch/InputSearch.tsx";
 
 interface TransactionsProps {
@@ -78,11 +78,11 @@ export const Transactions: FC = () => {
   type CategoryOption = "All" | (typeof categoriesTransactions)[number];
 
   const [page, setPage] = useState<number>(0);
-  const [rowsPerPage] = useState<number>(10);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedSort, setSelectedSort] = useState<SortOption>("All");
   const [selectedCategory, setSelectedCategory] =
     useState<CategoryOption>("All");
+  const [rowsPerPage, setRowsPerPage] = useState<number>(10);
 
   const itemsFrom = page * rowsPerPage;
   const itemsTo = itemsFrom + rowsPerPage;
@@ -116,19 +116,22 @@ export const Transactions: FC = () => {
       </SectionHeader>
       <StyledWrapperDetails>
         <StyledWrapperDetailsHeader>
+          <InputSearch searchTerm={searchTerm} onChange={setSearchTerm} />
           <div>
-            <InputSearch searchTerm={searchTerm} onChange={setSearchTerm} />
-          </div>
-          <div>
-            <SelectSortBy
+            <SelectDropdown
               label="Category"
               selectOptions={["All", ...categoriesTransactions]}
               onChange={setSelectedCategory}
             />
-            <SelectSortBy
+            <SelectDropdown
               label="Sort by"
               selectOptions={Object.values(sortLabels)}
               onChange={(value) => setSelectedSort(value as SortOption)}
+            />
+            <SelectDropdown
+              label="Rows per page"
+              selectOptions={["10", "20", "50"]}
+              onChange={(value) => setRowsPerPage(Number(value))}
             />
           </div>
         </StyledWrapperDetailsHeader>
@@ -166,7 +169,7 @@ export const Transactions: FC = () => {
                     <StyledTableCell isNegative={transaction.amount < 0}>
                       {transaction.amount > 0
                         ? `$${transaction.amount}`
-                        : `$${Math.abs(transaction.amount)}`}
+                        : `-$${Math.abs(transaction.amount)}`}
                     </StyledTableCell>
                   </TableRow>
                 ))}
@@ -174,7 +177,7 @@ export const Transactions: FC = () => {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[10]}
+          rowsPerPageOptions={[rowsPerPage]}
           component="div"
           count={transactions.length}
           rowsPerPage={rowsPerPage}

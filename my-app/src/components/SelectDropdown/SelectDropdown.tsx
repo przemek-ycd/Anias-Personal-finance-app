@@ -4,7 +4,7 @@ import {
   StyledFormControl,
   StyledInputLabel,
   StyledSelect,
-} from "./SelectSortBy.styles";
+} from "./SelectDropdown.styles";
 
 interface SelectElementProps {
   label: string;
@@ -12,7 +12,7 @@ interface SelectElementProps {
   onChange: (value: string) => void;
 }
 
-export const SelectSortBy: FC<SelectElementProps> = ({
+export const SelectDropdown: FC<SelectElementProps> = ({
   label,
   selectOptions,
   onChange,
@@ -32,7 +32,6 @@ export const SelectSortBy: FC<SelectElementProps> = ({
         labelId="category-select-label"
         id="category-select"
         value={selectedOption}
-        label={label}
         onChange={handleChange}
       >
         {selectOptions.map((value) => (
