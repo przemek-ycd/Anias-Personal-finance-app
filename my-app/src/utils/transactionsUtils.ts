@@ -79,3 +79,9 @@ export const calculateTotalSpentInCategory = (
     .map((transaction) => Math.abs(transaction.amount))
     .reduce((sum, amount) => sum + amount, 0);
 };
+
+export const selectUniqueCategoriesTransactions = (state: DataState) => {
+  return Array.from(
+    new Set(state.transactions.map((transaction) => transaction.category))
+  );
+};
