@@ -1,4 +1,4 @@
-import { DataState } from "../store/data";
+import { DataState, Transaction } from "../store/data";
 
 const getRecurringBills = (state: DataState) => {
   return Array.from(
@@ -84,4 +84,21 @@ export const selectUniqueCategoriesTransactions = (state: DataState) => {
   return Array.from(
     new Set(state.transactions.map((transaction) => transaction.category))
   );
+};
+
+export const getLastThreeTransactionsByCategory = (
+  transactions: Transaction[],
+  category: string
+) => {
+  return transactions
+    .filter((transaction) => transaction.category === category)
+    .slice(0, 3);
+};
+
+export const calculateTotalSpentInLastThreeTransactions = (
+  getLastThreeTransactionsByCategory: Transaction[]
+) => {
+  return getLastThreeTransactionsByCategory
+    .map((transaction) => Math.abs(transaction.amount))
+    .reduce((sum, amount) => sum + amount, 0);
 };

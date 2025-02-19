@@ -7,7 +7,7 @@ interface Balance {
   expenses: number;
 }
 
-interface Transaction {
+export interface Transaction {
   avatar: string;
   name: string;
   category: string;
@@ -74,8 +74,60 @@ const dataSlice = createSlice({
       state.isLoading = false;
       state.isError = true;
     },
+
+    addBudget(
+      state,
+      action: PayloadAction<{
+        category: string;
+        maximum: number;
+        theme: string;
+      }>
+    ) {
+      const newBudget = {
+        category: action.payload.category,
+        maximum: action.payload.maximum,
+        theme: action.payload.theme,
+      };
+      state.budgets.push(newBudget);
+    },
+
+    editBudget(
+      state,
+      action: PayloadAction<{
+        category: string;
+        newName: string;
+        newTarget: number;
+        color: string;
+      }>
+    ) {
+      const index = state.budgets.findIndex(
+        (budget) => budget.category === action.payload.category
+      );
+      if (index !== -1) {
+        const budgetToUpdate = state.budgets[index];
+        state.budgets[index] = {
+          ...budgetToUpdate,
+          category: action.payload.newName,
+          maximum: action.payload.newTarget,
+          theme: action.payload.color,
+        };
+      }
+    },
+
+    removeBudget(state, action: PayloadAction<string>) {
+      state.budgets = state.budgets.filter(
+        (budget) => budget.category !== action.payload
+      );
+    },
   },
 });
 
-export const { loadData, loadDataSuccess, loadDataError } = dataSlice.actions;
+export const {
+  loadData,
+  loadDataSuccess,
+  loadDataError,
+  addBudget,
+  editBudget,
+  removeBudget,
+} = dataSlice.actions;
 export default dataSlice.reducer;
