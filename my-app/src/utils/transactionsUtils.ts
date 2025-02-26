@@ -1,6 +1,6 @@
 import { DataState, Transaction } from "../store/data";
 
-const getRecurringBills = (state: DataState) => {
+export const getRecurringBills = (state: DataState) => {
   return Array.from(
     new Set(state.transactions.filter((transaction) => transaction.recurring))
   );
