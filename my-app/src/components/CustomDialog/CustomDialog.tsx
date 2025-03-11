@@ -3,7 +3,7 @@ import {
   StyledWrapperDialog,
   SectionHeaderDialog,
   ButtonSave,
-} from "./Dialog.styles.js";
+} from "./CustomDialog.styles.js";
 import { Dialog } from "@mui/material";
 import { FormControl } from "@mui/material";
 import { SelectDropdown } from "../SelectDropdown/SelectDropdown.tsx";
@@ -17,7 +17,7 @@ const colors = {
   Navy: "#826CB0",
 };
 
-interface DialogProps {
+interface CustomDialogProps {
   open: boolean;
   onClose: () => void;
   title: string;
@@ -31,7 +31,7 @@ interface DialogProps {
   onSave: () => void;
 }
 
-export const CustomDialog: FC<DialogProps> = ({
+export const CustomDialog: FC<CustomDialogProps> = ({
   open,
   onClose,
   title,

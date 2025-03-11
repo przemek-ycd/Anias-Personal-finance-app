@@ -2,7 +2,7 @@ import React, { FC, useState } from "react";
 import { SectionHeader } from "./Header.styles.js";
 import { useDispatch } from "react-redux";
 import { addBudget } from "../../store/data.ts";
-import { CustomDialog } from "../CustomDialog/Dialog.tsx";
+import { CustomDialog } from "../CustomDialog/CustomDialog.tsx";
 
 interface HeaderProps {
   title: string;
