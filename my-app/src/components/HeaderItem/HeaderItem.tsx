@@ -20,8 +20,7 @@ interface HeaderItemProps {
 export const HeaderItem: FC<HeaderItemProps> = ({ title, data, category }) => {
   const dispatch = useDispatch();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     categoryName: data.category,
@@ -29,12 +28,12 @@ export const HeaderItem: FC<HeaderItemProps> = ({ title, data, category }) => {
     themeColor: data.theme,
   });
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
+  const handleClick = () => {
+    setIsMenuOpen(true);
   };
 
   const handleClose = () => {
-    setAnchorEl(null);
+    setIsMenuOpen(false);
   };
 
   const handleDelete = (name: string) => {
@@ -65,7 +64,7 @@ export const HeaderItem: FC<HeaderItemProps> = ({ title, data, category }) => {
           alt="Icon ellipsis"
         />
       </Button>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+      <Menu open={isMenuOpen} onClose={handleClose}>
         <MenuItem onClick={() => setIsEditDialogOpen(true)}>Edit</MenuItem>
         <MenuItem onClick={() => handleDelete(data.category)}>Delete</MenuItem>
       </Menu>
@@ -75,8 +74,8 @@ export const HeaderItem: FC<HeaderItemProps> = ({ title, data, category }) => {
         title={`Edit ${title}`}
         description={`If your saving targets change, feel free to update your ${title}s.`}
         formData={formData}
-        setFormData={setFormData}
-        onSave={handleEditSubmit}
+        onSave={setFormData}
+        onSaveButton={handleEditSubmit}
       />
     </SectionHeader>
   );

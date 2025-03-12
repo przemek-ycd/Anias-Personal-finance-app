@@ -42,8 +42,8 @@ export const Header: FC<HeaderProps> = ({ title }) => {
         title={`Add New ${title}`}
         description={`Create a ${title} to set savings targets`}
         formData={formData}
-        setFormData={setFormData}
-        onSave={handleSave}
+        onSave={setFormData}
+        onSaveButton={handleSave}
       />
     </>
   );
