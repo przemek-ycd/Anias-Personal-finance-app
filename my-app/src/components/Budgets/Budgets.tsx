@@ -38,18 +38,16 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
   theme,
   maximum,
 }) => {
-  const { transactions, budgets } = useSelector(
-    (state: RootState) => state.data
-  );
+  const { transactions } = useSelector((state: RootState) => state.data);
+  const { budgets } = useSelector((state: RootState) => state.data);
 
-  const lastThreeTransactionsByCategory = getLastThreeTransactionsByCategory(
+  const filteredTransactions = getLastThreeTransactionsByCategory(
     transactions,
     category
   );
 
-  const spentMoneyValue = calculateTotalSpentInLastThreeTransactions(
-    lastThreeTransactionsByCategory
-  );
+  const spentMoneyValue =
+    calculateTotalSpentInLastThreeTransactions(filteredTransactions);
 
   const freeMoneyValue = maximum - spentMoneyValue;
 
@@ -58,7 +56,7 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
       <DetailsItem>
         <ItemHeader>
           <p>
-            <Dot theme={theme}></Dot>
+            <Dot style={{ backgroundColor: theme }}></Dot>
             {category}
           </p>
           <HeaderItem title="Budget" data={budgets} category={category} />
@@ -85,9 +83,7 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
           <SectionHeader>
             <h4>Latest Spending</h4>
           </SectionHeader>
-          <TransactionTable
-            filteredTransactions={lastThreeTransactionsByCategory}
-          />
+          <TransactionTable filteredTransactions={filteredTransactions} />
         </StyledWrapperTransactionsSection>
       </DetailsItem>
     </>
@@ -95,11 +91,11 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
 };
 
 export const Budgets: FC = () => {
+  const { budgets } = useSelector((state: RootState) => state.data);
   const dataState = useSelector((state: RootState) => state.data);
-  const { budgets } = dataState;
 
-  const maxLimitValue = budgets.map((budget) => Math.abs(budget.maximum));
-  const roundedMaxLimitValue = maxLimitValue
+  const maxLimitValue = budgets
+    .map((budget) => Math.abs(budget.maximum))
     .reduce((sum, maximum) => sum + maximum, 0)
     .toFixed(2);
 
@@ -128,7 +124,7 @@ export const Budgets: FC = () => {
           <Chart chartData={chartData} />
           <BudgetSummary>
             <p>${totalValue}</p>
-            <p>of ${roundedMaxLimitValue} limit</p>
+            <p>of ${maxLimitValue} limit</p>
           </BudgetSummary>
           <div>
             <h3>Spending Summary</h3>

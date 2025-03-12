@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { removeBudget, editBudget } from "../../store/data.ts";
 import { SectionHeader, Dot } from "./HeaderItem.styles.js";
 import { Menu, MenuItem, Button } from "@mui/material";
-import { CustomDialog } from "../CustomDialog/CustomDialog.tsx";
+import { CustomDialog } from "../CustomDialog/Dialog.tsx";
 
 interface Budget {
   category: string;
@@ -56,7 +56,7 @@ export const HeaderItem: FC<HeaderItemProps> = ({ title, data, category }) => {
   return (
     <SectionHeader>
       <p>
-        <Dot />
+        <Dot></Dot>
         {data.category}
       </p>
       <Button onClick={handleClick}>
