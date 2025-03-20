@@ -61,7 +61,12 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
             <Dot theme={theme}></Dot>
             {category}
           </p>
-          <HeaderItem title="Budget" data={budgets} category={category} />
+          <HeaderItem
+            title="Budget"
+            data={budgets}
+            name={category}
+            type="budget"
+          />
         </ItemHeader>
         <p>Maximum of ${maximum}</p>
         <LinearProgressBar
@@ -122,7 +127,7 @@ export const Budgets: FC = () => {
 
   return (
     <StyledWrapper>
-      <Header title="Budget" />
+      <Header title="Budget" type="budget" />
       <StyledWrapperDetails>
         <StyledWrapperChart>
           <Chart chartData={chartData} />

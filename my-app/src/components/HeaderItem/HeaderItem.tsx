@@ -1,32 +1,89 @@
 import React, { FC, useState } from "react";
 import { useDispatch } from "react-redux";
-import { removeBudget, editBudget } from "../../store/data.ts";
+import {
+  removeBudget,
+  editBudget,
+  removePot,
+  editPot,
+} from "../../store/data.ts";
 import { SectionHeader, Dot } from "./HeaderItem.styles.js";
 import { Menu, MenuItem, Button } from "@mui/material";
 import { CustomDialog } from "../CustomDialog/CustomDialog.tsx";
 
-interface Budget {
+interface FormData {
+  newName: string;
+  newTarget: number;
+  color: string;
+}
+
+interface BudgetData {
   category: string;
   maximum: number;
   theme: string;
 }
 
-interface HeaderItemProps {
-  title: string;
-  data: Budget;
-  category: string;
+interface PotsData {
+  name: string;
+  target: number;
+  theme: string;
 }
 
-export const HeaderItem: FC<HeaderItemProps> = ({ title, data, category }) => {
+interface HeaderItemProps {
+  title: string;
+  data: BudgetData | PotsData;
+  name: string;
+  type: "budget" | "pot";
+}
+
+export const HeaderItem: FC<HeaderItemProps> = ({
+  title,
+  data,
+  name,
+  type,
+}) => {
   const dispatch = useDispatch();
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const [formData, setFormData] = useState({
-    categoryName: data.category,
-    targetAmount: data.maximum,
-    themeColor: data.theme,
-  });
+  const config = {
+    budget: {
+      initialState: {
+        newName: data.category,
+        newTarget: data.maximum,
+        color: data.theme,
+      },
+      actionEdit: (formData: FormData) =>
+        dispatch(
+          editBudget({
+            category: name,
+            newName: formData.newName,
+            newTarget: formData.newTarget,
+            color: formData.color,
+          })
+        ),
+      actionRemove: (name: string) => dispatch(removeBudget(name)),
+    },
+    pot: {
+      initialState: {
+        name: data.name,
+        newName: data.name,
+        newTarget: data.target,
+        color: data.theme,
+      },
+      actionEdit: (formData: FormData) =>
+        dispatch(
+          editPot({
+            name: name,
+            newName: formData.newName,
+            newTarget: formData.newTarget,
+            color: formData.color,
+          })
+        ),
+      actionRemove: (name: string) => dispatch(removePot(name)),
+    },
+  };
+
+  const [formData, setFormData] = useState(config[type].initialState);
 
   const handleClick = () => {
     setIsMenuOpen(true);
@@ -36,27 +93,20 @@ export const HeaderItem: FC<HeaderItemProps> = ({ title, data, category }) => {
     setIsMenuOpen(false);
   };
 
-  const handleDelete = (name: string) => {
-    dispatch(removeBudget(name));
+  const handleDelete = () => {
+    config[type].actionRemove(name);
   };
 
   const handleEditSubmit = () => {
-    dispatch(
-      editBudget({
-        category: category,
-        newName: formData.categoryName,
-        newTarget: formData.targetAmount,
-        color: formData.themeColor,
-      })
-    );
+    config[type].actionEdit(formData);
     setIsEditDialogOpen(false);
   };
 
   return (
     <SectionHeader>
       <p>
-        <Dot />
-        {data.category}
+        <Dot theme={data.theme} />
+        {data.name}
       </p>
       <Button onClick={handleClick}>
         <img
@@ -66,7 +116,7 @@ export const HeaderItem: FC<HeaderItemProps> = ({ title, data, category }) => {
       </Button>
       <Menu open={isMenuOpen} onClose={handleClose}>
         <MenuItem onClick={() => setIsEditDialogOpen(true)}>Edit</MenuItem>
-        <MenuItem onClick={() => handleDelete(data.category)}>Delete</MenuItem>
+        <MenuItem onClick={handleDelete}>Delete</MenuItem>
       </Menu>
       <CustomDialog
         open={isEditDialogOpen}
