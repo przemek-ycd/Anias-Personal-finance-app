@@ -5,7 +5,7 @@ interface TextFieldComponentProps {
   label: string;
   name: string;
   value: string | number;
-  onChange: React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
   type: string;
 }
 
