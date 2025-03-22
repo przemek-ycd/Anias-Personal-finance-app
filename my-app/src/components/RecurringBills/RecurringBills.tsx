@@ -155,6 +155,28 @@ export const RecurringBills: FC = () => {
     0
   );
 
+  const formatDate = (date: string): string => {
+    const transactionDate = new Date(date);
+    return transactionDate
+      .toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "long",
+      })
+      .replace(
+        /^(\w+)\s(\d+)$/,
+        (_, month, day) => `Monthly - ${day}${getOrdinalSuffix(day)}`
+      );
+  };
+
+  const getBillStatusIcon = (date: string) => {
+    const day = new Date(date).getDate();
+    if (day >= 5 && day <= 11) {
+      return billIcons.due;
+    } else if (day >= 1 && day <= 4) {
+      return billIcons.paid;
+    }
+  };
+
   return (
     <StyledWrapper>
       <SectionHeader>
@@ -210,24 +232,8 @@ export const RecurringBills: FC = () => {
                       </WrapperImage>
                     </TableCell>
                     <TableCell>
-                      {new Date(transaction.date)
-                        .toLocaleDateString("en-US", {
-                          day: "numeric",
-                          month: "long",
-                        })
-                        .replace(
-                          /^(\w+)\s(\d+)$/,
-                          (_, month, day) =>
-                            `Monthly - ${day}${getOrdinalSuffix(day)}`
-                        )}
-                      {(() => {
-                        const day = new Date(transaction.date).getDate();
-                        if (day >= 5 && day <= 11) {
-                          return billIcons.due;
-                        } else if (day >= 1 && day <= 4) {
-                          return billIcons.paid;
-                        }
-                      })()}
+                      {formatDate(transaction.date)}
+                      {getBillStatusIcon(transaction.date)}
                     </TableCell>
                     <TableCell>{`$${Math.abs(transaction.amount)}`}</TableCell>
                   </TableRow>
