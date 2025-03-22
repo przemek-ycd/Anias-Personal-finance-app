@@ -102,3 +102,14 @@ export const calculateTotalSpentInLastThreeTransactions = (
     .map((transaction) => Math.abs(transaction.amount))
     .reduce((sum, amount) => sum + amount, 0);
 };
+
+export const sortMethods = {
+  highest: (transactions: Transaction[]) =>
+    [...transactions].sort((a, b) => b.amount - a.amount),
+  lowest: (transactions: Transaction[]) =>
+    [...transactions].sort((a, b) => a.amount - b.amount),
+  aToZ: (transactions: Transaction[]) =>
+    transactions.sort((a, b) => a.name.localeCompare(b.name)),
+  zToA: (transactions: Transaction[]) =>
+    transactions.sort((a, b) => b.name.localeCompare(a.name)),
+};

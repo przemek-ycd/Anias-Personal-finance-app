@@ -24,6 +24,7 @@ import { RootState } from "../../store/store";
 import {
   getRecurringBills,
   getSummaryRecurringBillsData,
+  sortMethods,
 } from "../../utils/transactionsUtils.ts";
 import { SelectDropdown } from "../SelectDropdown/SelectDropdown.tsx";
 import { InputSearch } from "../InputSearch/InputSearch.tsx";
@@ -39,7 +40,7 @@ type SortOption =
 
 const tableHeaders = ["Bill Title", "Due Date", "Amount"];
 
-const sortByDayOfMonth = (transactions: any[]) =>
+const sortByDayOfMonth = (transactions: TransactionsProps[]) =>
   [...transactions].sort((a, b) => {
     const dayA = new Date(a.date).getDate();
     const dayB = new Date(b.date).getDate();
@@ -55,19 +56,15 @@ interface TransactionsProps {
   recurring: boolean;
 }
 
-const sortMethods = {
-  all: (transactions: TransactionsProps[]) => transactions,
-  highest: (transactions: TransactionsProps[]) =>
-    [...transactions].sort((a, b) => b.amount - a.amount),
-  lowest: (transactions: TransactionsProps[]) =>
-    [...transactions].sort((a, b) => a.amount - b.amount),
+const sortMethodsForDateOrder = {
   oldest: (transactions: TransactionsProps[]) => sortByDayOfMonth(transactions),
   latest: (transactions: TransactionsProps[]) =>
     sortByDayOfMonth(transactions).reverse(),
-  aToZ: (transactions: TransactionsProps[]) =>
-    [...transactions].sort((a, b) => a.name.localeCompare(b.name)),
-  zToA: (transactions: TransactionsProps[]) =>
-    [...transactions].sort((a, b) => b.name.localeCompare(a.name)),
+};
+
+const combinedSortMethods = {
+  ...sortMethods,
+  ...sortMethodsForDateOrder,
 };
 
 const sortLabels = {
@@ -145,7 +142,12 @@ export const RecurringBills: FC = () => {
   }, [searchTerm, tableTransactions]);
 
   const sortedTransactions = useMemo(() => {
-    return sortMethods[selectedSort.toLowerCase()](filteredTransactions);
+    if (selectedSort.toLowerCase() === "all") {
+      return filteredTransactions;
+    }
+    return combinedSortMethods[selectedSort.toLowerCase()](
+      filteredTransactions
+    );
   }, [selectedSort, filteredTransactions]);
 
   const totalBillsAmount = tableTransactions.reduce(
