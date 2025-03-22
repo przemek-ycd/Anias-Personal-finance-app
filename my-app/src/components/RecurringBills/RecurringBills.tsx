@@ -174,7 +174,7 @@ export const RecurringBills: FC = () => {
             <h3>Summary</h3>
             {summaryItems.map((item) => (
               <SummaryBillsItem
-                key={`${item.title}-${item.content}`}
+                key={`${item.title}`}
                 title={item.title}
                 content={item.content}
               />
@@ -183,10 +183,7 @@ export const RecurringBills: FC = () => {
         </StyledWrapperDetailsHeader>
         <BillsWrapper>
           <div>
-            <InputSearch
-              searchTerm={searchTerm}
-              onChange={(value) => setSearchTerm(value)}
-            />
+            <InputSearch searchTerm={searchTerm} onChange={setSearchTerm} />
             <SelectDropdown
               label="Sort by"
               selectOptions={Object.values(sortLabels)}
@@ -232,11 +229,7 @@ export const RecurringBills: FC = () => {
                         }
                       })()}
                     </TableCell>
-                    <TableCell>
-                      {transaction.amount > 0
-                        ? `$${transaction.amount}`
-                        : `$${Math.abs(transaction.amount)}`}
-                    </TableCell>
+                    <TableCell>{`$${Math.abs(transaction.amount)}`}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
