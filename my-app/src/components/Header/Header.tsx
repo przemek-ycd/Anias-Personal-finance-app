@@ -1,56 +1,33 @@
 import React, { FC, useState } from "react";
 import { SectionHeader } from "./Header.styles.js";
 import { useDispatch } from "react-redux";
-import { addBudget, addPot } from "../../store/data.ts";
+import { addBudget } from "../../store/data.ts";
 import { CustomDialog } from "../CustomDialog/CustomDialog.tsx";
 
 interface HeaderProps {
   title: string;
-  type: "budget" | "pot";
 }
 
-interface FormData {
-  newName: string;
-  newTarget: number;
-  color: string;
-}
-
-export const Header: FC<HeaderProps> = ({ title, type }) => {
+export const Header: FC<HeaderProps> = ({ title }) => {
   const dispatch = useDispatch();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const config = {
-    budget: {
-      initialState: { newName: "", newTarget: 0, color: "" },
-      action: (formData: FormData) =>
-        dispatch(
-          addBudget({
-            category: formData.newName,
-            maximum: formData.newTarget,
-            theme: formData.color,
-          })
-        ),
-    },
-    pot: {
-      initialState: { newName: "", newTarget: 0, color: "" },
-      action: (formData: FormData) =>
-        dispatch(
-          addPot({
-            name: formData.newName,
-            target: formData.newTarget,
-            total: 0,
-            theme: formData.color,
-          })
-        ),
-    },
-  };
-
-  const [formData, setFormData] = useState(config[type].initialState);
+  const [formData, setFormData] = useState({
+    categoryName: "",
+    targetAmount: 0,
+    themeColor: "",
+  });
 
   const handleSave = () => {
-    config[type].action(formData);
+    dispatch(
+      addBudget({
+        category: formData.categoryName,
+        maximum: formData.targetAmount,
+        theme: formData.themeColor,
+      })
+    );
     setIsDialogOpen(false);
-    setFormData(config[type].initialState);
+    setFormData({ categoryName: "", targetAmount: 0, themeColor: "" });
   };
 
   return (
