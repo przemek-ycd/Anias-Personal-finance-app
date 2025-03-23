@@ -119,66 +119,6 @@ const dataSlice = createSlice({
         (budget) => budget.category !== action.payload
       );
     },
-
-    updatePotAmount(
-      state,
-      action: PayloadAction<{
-        name: string;
-        newTotal: number;
-      }>
-    ) {
-      const index = state.pots.findIndex(
-        (pot) => pot.name === action.payload.name
-      );
-      if (index !== -1) {
-        state.pots[index].total = action.payload.newTotal;
-      }
-    },
-
-    editPot(
-      state,
-      action: PayloadAction<{
-        name: string;
-        newName: string;
-        newTarget: number;
-        color: string;
-      }>
-    ) {
-      const index = state.pots.findIndex(
-        (pot) => pot.name === action.payload.name
-      );
-      if (index !== -1) {
-        const potToUpdate = state.pots[index];
-        state.pots[index] = {
-          ...potToUpdate,
-          name: action.payload.newName,
-          target: action.payload.newTarget,
-          theme: action.payload.color,
-        };
-      }
-    },
-
-    addPot(
-      state,
-      action: PayloadAction<{
-        name: string;
-        target: number;
-        total: number;
-        theme: string;
-      }>
-    ) {
-      const newPot = {
-        name: action.payload.name,
-        target: action.payload.target,
-        total: action.payload.total,
-        theme: action.payload.theme,
-      };
-      state.pots.push(newPot);
-    },
-
-    removePot(state, action: PayloadAction<string>) {
-      state.pots = state.pots.filter((pot) => pot.name !== action.payload);
-    },
   },
 });
 
@@ -189,9 +129,5 @@ export const {
   addBudget,
   editBudget,
   removeBudget,
-  updatePotAmount,
-  editPot,
-  addPot,
-  removePot,
 } = dataSlice.actions;
 export default dataSlice.reducer;
