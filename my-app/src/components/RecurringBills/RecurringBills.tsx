@@ -41,7 +41,7 @@ type SortOption =
 const tableHeaders = ["Bill Title", "Due Date", "Amount"];
 
 const sortByDayOfMonth = (transactions: TransactionsProps[]) =>
-  [...transactions].sort((a, b) => {
+  transactions.sort((a, b) => {
     const dayA = new Date(a.date).getDate();
     const dayB = new Date(b.date).getDate();
     return dayA - dayB;
