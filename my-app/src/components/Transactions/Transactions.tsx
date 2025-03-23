@@ -18,7 +18,10 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/store";
-import { selectUniqueCategoriesTransactions } from "../../utils/transactionsUtils.ts";
+import {
+  selectUniqueCategoriesTransactions,
+  sortMethods,
+} from "../../utils/transactionsUtils.ts";
 import { SelectDropdown } from "../SelectDropdown/SelectDropdown.tsx";
 import { InputSearch } from "../InputSearch/InputSearch.tsx";
 
@@ -40,12 +43,7 @@ type SortOption =
   | "A to Z"
   | "Z to A";
 
-const sortMethods = {
-  all: (transactions: TransactionsProps[]) => transactions,
-  highest: (transactions: TransactionsProps[]) =>
-    [...transactions].sort((a, b) => b.amount - a.amount),
-  lowest: (transactions: TransactionsProps[]) =>
-    [...transactions].sort((a, b) => a.amount - b.amount),
+const sortMethodsForDateOrder = {
   oldest: (transactions: TransactionsProps[]) =>
     [...transactions].sort(
       (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
@@ -54,10 +52,11 @@ const sortMethods = {
     [...transactions].sort(
       (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
     ),
-  aToZ: (transactions: TransactionsProps[]) =>
-    [...transactions].sort((a, b) => a.name.localeCompare(b.name)),
-  zToA: (transactions: TransactionsProps[]) =>
-    [...transactions].sort((a, b) => b.name.localeCompare(a.name)),
+};
+
+const combinedSortMethods = {
+  ...sortMethods,
+  ...sortMethodsForDateOrder,
 };
 
 const sortLabels = {
@@ -102,7 +101,10 @@ export const Transactions: FC = () => {
   );
 
   const sortedTransactions = useMemo(() => {
-    return sortMethods[selectedSort.toLowerCase()](filteredBySearch);
+    if (selectedSort.toLowerCase() === "all") {
+      return filteredBySearch;
+    }
+    return combinedSortMethods[selectedSort.toLowerCase()](filteredBySearch);
   }, [selectedSort, filteredBySearch]);
 
   const handleChangePage = (event: unknown, newPage: number) => {
