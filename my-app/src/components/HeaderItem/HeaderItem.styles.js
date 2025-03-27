@@ -37,4 +37,5 @@ export const Dot = styled.div `
     height: 15px;
     border-radius: 50%;
     margin-right: 0.5rem;
+    background-color: ${(props) => props.theme}
 `;

@@ -23,9 +23,9 @@ interface CustomDialogProps {
   title: string;
   description: string;
   formData: {
-    categoryName: string;
-    targetAmount: number;
-    themeColor: string;
+    newName: string;
+    newTarget: number;
+    color: string;
   };
   onSave: (data: any) => void;
   onSaveButton: () => void;
@@ -50,12 +50,10 @@ export const CustomDialog: FC<CustomDialogProps> = ({
         <p>{description}</p>
         <div>
           <TextFieldComponent
-            label="Budget Name"
+            label={`${title} Name`}
             name="name"
-            value={formData.categoryName}
-            onChange={(e) =>
-              onSave({ ...formData, categoryName: e.target.value })
-            }
+            value={formData.newName}
+            onChange={(e) => onSave({ ...formData, newName: e.target.value })}
             type="text"
           />
         </div>
@@ -63,9 +61,9 @@ export const CustomDialog: FC<CustomDialogProps> = ({
           <TextFieldComponent
             label="Target Amount ($)"
             name="targetAmount"
-            value={formData.targetAmount}
+            value={formData.newTarget}
             onChange={(e) =>
-              onSave({ ...formData, targetAmount: Number(e.target.value) })
+              onSave({ ...formData, newTarget: Number(e.target.value) })
             }
             type="number"
           />
@@ -74,7 +72,7 @@ export const CustomDialog: FC<CustomDialogProps> = ({
           <SelectDropdown
             label="Theme Color"
             selectOptions={Object.keys(colors)}
-            onChange={(value) => onSave({ ...formData, themeColor: value })}
+            onChange={(value) => onSave({ ...formData, color: value })}
           />
         </FormControl>
         <ButtonSave onClick={onSaveButton}>Save</ButtonSave>
