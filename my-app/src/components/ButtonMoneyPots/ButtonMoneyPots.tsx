@@ -1,7 +1,7 @@
-import React, { FC, useState } from "react";
+import React, { FC, useState, useMemo } from "react";
 import {
   SectionHeaderDialog,
-  ButtonSave,
+  SaveButton,
   ItemTotalSaved,
   StyledLinearProgressDetails,
 } from "./ButtonMoneyPots.styles.js";
@@ -48,9 +48,14 @@ export const ButtonMoney: FC<ButtonMoneyProps> = ({
     setIsDialogOpen(false);
   };
 
-  const progressAmount = Math.round(
-    target > 0 ? (newTotalAmount / target) * 100 : 0
-  );
+  const progressAmount = useMemo(() => {
+    return Math.round(target > 0 ? (newTotalAmount / target) * 100 : 0);
+  }, [newTotalAmount, target]);
+
+  const handleTextChange = (e) => {
+    const value = Math.max(0, Number(e.target.value));
+    setInputValue(value);
+  };
 
   return (
     <>
@@ -88,16 +93,13 @@ export const ButtonMoney: FC<ButtonMoneyProps> = ({
               label="Target Amount ($)"
               name="targetAmount"
               value={inputValue}
-              onChange={(e) => {
-                const value = Math.max(0, Number(e.target.value));
-                setInputValue(value);
-              }}
+              onChange={handleTextChange}
               type="number"
             />
           </div>
         </DialogContent>
         <DialogActions>
-          <ButtonSave onClick={handleSave}>Save changes</ButtonSave>
+          <SaveButton onClick={handleSave}>Save changes</SaveButton>
         </DialogActions>
       </Dialog>
     </>

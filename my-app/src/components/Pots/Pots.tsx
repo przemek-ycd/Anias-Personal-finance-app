@@ -18,11 +18,15 @@ import { ButtonMoney } from "../ButtonMoneyPots/ButtonMoneyPots.tsx";
 export const Pots: FC = () => {
   const { pots } = useSelector((state: RootState) => state.data);
 
+  const progressPercentages = pots.map((pot) =>
+    Math.round(pot.target > 0 ? (pot.total / pot.target) * 100 : 0)
+  );
+
   return (
     <StyledWrapper>
       <Header title="Pot" type="pot" />
       <StyledWrapperDetails>
-        {pots.map((pot) => (
+        {pots.map((pot, index) => (
           <StyledWrapperDetailsItem key={pot.name}>
             <HeaderItem data={pot} title={"Pot"} name={pot.name} type="pot" />
             <ItemTotalSaved>
@@ -38,17 +42,10 @@ export const Pots: FC = () => {
                 height={"20px"}
                 border={"2px solid rgb(241, 239, 236)"}
                 backgroundColor={pot.theme}
-                value={Math.round(
-                  pot.target > 0 ? (pot.total / pot.target) * 100 : 0
-                )}
+                value={progressPercentages[index]}
               />
               <StyledLinearProgressDetails>
-                <p>
-                  {Math.round(
-                    pot.target > 0 ? (pot.total / pot.target) * 100 : 0
-                  )}
-                  %
-                </p>
+                <p>{progressPercentages[index]}%</p>
                 <p>Target of ${pot.target.toFixed(2)}</p>
               </StyledLinearProgressDetails>
             </Box>

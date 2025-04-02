@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const SectionHeaderDialog = styled.div `
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
 
     h1 {
         margin-bottom: 2rem;
@@ -20,8 +20,6 @@ export const SectionHeaderDialog = styled.div `
         border: 1px solid black;
         background-color: transparent;
         color: #696868;
-        margin-top: -15%;
-        margin-right: -3%;
         transition: all 0.3s ease;
         &:hover {
             cursor: pointer;
@@ -31,7 +29,7 @@ export const SectionHeaderDialog = styled.div `
     }
 `;
 
-export const ButtonSave = styled.button `
+export const SaveButton = styled.button `
     width: 100%;
     border: none;
     border-radius: 10px;
