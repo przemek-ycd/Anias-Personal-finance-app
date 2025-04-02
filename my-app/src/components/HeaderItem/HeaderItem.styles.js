@@ -21,14 +21,6 @@ export const SectionHeader = styled.div `
             margin-right: 0.5rem;
         }
     }
-
-    button {
-        background-color: transparent;
-        border: none;
-        transition: all 0.3s ease;
-        &:hover {
-            cursor: pointer;
-        }
     }
 `;
 

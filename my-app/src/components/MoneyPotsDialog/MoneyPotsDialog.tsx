@@ -4,7 +4,7 @@ import {
   SaveButton,
   ItemTotalSaved,
   StyledLinearProgressDetails,
-} from "./ButtonMoneyPots.styles.js";
+} from "./MoneyPotsDialog.styles.js";
 import {
   Dialog,
   DialogActions,
@@ -12,41 +12,28 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-import { useDispatch } from "react-redux";
 import { LinearProgressBar } from "../LinearProgressBar/LinearProgressBar.tsx";
 import { TextFieldComponent } from "../TextField/TextField.tsx";
-import { updatePotAmount } from "../../store/data.ts";
 
-interface ButtonMoneyProps {
+interface MoneyPotsDialogProps {
   buttonContent: string;
-  dialogContent: string;
+  dialogTitle: string;
   target: number;
   calculateNewTotalAmount: (inputValue: number) => number;
-  potName: string;
+  handleSave: (inputValue: number) => void;
 }
 
-export const ButtonMoney: FC<ButtonMoneyProps> = ({
+export const MoneyPotsDialog: FC<MoneyPotsDialogProps> = ({
   buttonContent,
-  dialogContent,
+  dialogTitle,
   target,
+  handleSave,
   calculateNewTotalAmount,
-  potName,
 }) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [inputValue, setInputValue] = useState(0);
-  const dispatch = useDispatch();
 
   const newTotalAmount = calculateNewTotalAmount(inputValue);
-
-  const handleSave = () => {
-    dispatch(
-      updatePotAmount({
-        name: potName,
-        newTotal: newTotalAmount,
-      })
-    );
-    setIsDialogOpen(false);
-  };
 
   const progressAmount = useMemo(() => {
     return Math.round(target > 0 ? (newTotalAmount / target) * 100 : 0);
@@ -57,19 +44,24 @@ export const ButtonMoney: FC<ButtonMoneyProps> = ({
     setInputValue(value);
   };
 
+  const handleSaveClick = () => {
+    handleSave(inputValue);
+    setIsDialogOpen(false);
+  };
+
   return (
     <>
       <button onClick={() => setIsDialogOpen(true)}>{buttonContent}</button>
       <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
         <DialogTitle>
           <SectionHeaderDialog>
-            <h1>{dialogContent} ‘Savings’</h1>
+            <h1>{dialogTitle} ‘Savings’</h1>
             <button onClick={() => setIsDialogOpen(false)}>X</button>
           </SectionHeaderDialog>
         </DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {dialogContent} your pot to increase your savings. This will add to
+            {dialogTitle} your pot to increase your savings. This will add to
             the amount you have in this pot.
           </DialogContentText>
           <ItemTotalSaved>
@@ -99,7 +91,7 @@ export const ButtonMoney: FC<ButtonMoneyProps> = ({
           </div>
         </DialogContent>
         <DialogActions>
-          <SaveButton onClick={handleSave}>Save changes</SaveButton>
+          <SaveButton onClick={handleSaveClick}>Save changes</SaveButton>
         </DialogActions>
       </Dialog>
     </>

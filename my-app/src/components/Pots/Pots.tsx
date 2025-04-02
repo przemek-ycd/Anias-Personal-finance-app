@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   StyledWrapper,
   StyledWrapperDetails,
@@ -13,60 +13,172 @@ import { RootState } from "../../store/store";
 import { LinearProgressBar } from "../LinearProgressBar/LinearProgressBar.tsx";
 import { HeaderItem } from "../HeaderItem/HeaderItem.tsx";
 import { Header } from "../Header/Header.tsx";
-import { ButtonMoney } from "../ButtonMoneyPots/ButtonMoneyPots.tsx";
+import { MoneyPotsDialog } from "../MoneyPotsDialog/MoneyPotsDialog.tsx";
+import { useDispatch } from "react-redux";
+import {
+  addPot,
+  removePot,
+  editPot,
+  updatePotAmount,
+} from "../../store/data.ts";
+import { CustomDialog } from "../CustomDialog/CustomDialog.tsx";
 
-export const Pots: FC = () => {
-  const { pots } = useSelector((state: RootState) => state.data);
+interface DetailsItemComponentProps {
+  name: string;
+  theme: string;
+  total: number;
+  target: number;
+}
 
-  const progressPercentages = pots.map((pot) =>
-    Math.round(pot.target > 0 ? (pot.total / pot.target) * 100 : 0)
+const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
+  name,
+  theme,
+  total,
+  target,
+}) => {
+  const dispatch = useDispatch();
+
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    newName: name,
+    newTarget: target,
+    color: theme,
+  });
+
+  const handleAddMoney = (inputValue: number) => {
+    dispatch(updatePotAmount({ name, newTotal: total + inputValue }));
+  };
+
+  const handleWithdrawMoney = (inputValue: number) => {
+    dispatch(updatePotAmount({ name, newTotal: total - inputValue }));
+  };
+
+  const handleEditSubmit = () => {
+    dispatch(
+      editPot({
+        name,
+        newName: formData.newName,
+        newTarget: formData.newTarget,
+        color: formData.color,
+      })
+    );
+    setIsEditDialogOpen(false);
+  };
+
+  const handleRemovePot = (name: string) => {
+    dispatch(removePot(name));
+  };
+
+  const progressPercentages = Math.round(
+    target > 0 ? (total / target) * 100 : 0
   );
 
   return (
-    <StyledWrapper>
-      <Header title="Pot" type="pot" />
-      <StyledWrapperDetails>
-        {pots.map((pot, index) => (
-          <StyledWrapperDetailsItem key={pot.name}>
-            <HeaderItem data={pot} title={"Pot"} name={pot.name} type="pot" />
-            <ItemTotalSaved>
-              <p>Total Saved</p>
-              <p>${pot.total.toFixed(2)}</p>
-            </ItemTotalSaved>
-            <Box
-              sx={{
-                marginTop: "2rem",
-              }}
-            >
-              <LinearProgressBar
-                height={"20px"}
-                border={"2px solid rgb(241, 239, 236)"}
-                backgroundColor={pot.theme}
-                value={progressPercentages[index]}
-              />
-              <StyledLinearProgressDetails>
-                <p>{progressPercentages[index]}%</p>
-                <p>Target of ${pot.target.toFixed(2)}</p>
-              </StyledLinearProgressDetails>
-            </Box>
+    <StyledWrapperDetailsItem key={name}>
+      <div>
+        <HeaderItem
+          color={theme}
+          name={name}
+          onEdit={() => setIsEditDialogOpen(true)}
+          onDelete={() => handleRemovePot(name)}
+        />
+        <CustomDialog
+          open={isEditDialogOpen}
+          onClose={() => setIsEditDialogOpen(false)}
+          title={`Edit Pot`}
+          description={`If your saving targets change, feel free to update your Pots.`}
+          formData={formData}
+          onSave={setFormData}
+          onSaveButton={handleEditSubmit}
+        />
+      </div>
+      <ItemTotalSaved>
+        <p>Total Saved</p>
+        <p>${total.toFixed(2)}</p>
+      </ItemTotalSaved>
+      <Box
+        sx={{
+          marginTop: "2rem",
+        }}
+      >
+        <LinearProgressBar
+          height={"20px"}
+          border={"2px solid rgb(241, 239, 236)"}
+          backgroundColor={theme}
+          value={progressPercentages}
+        />
+        <StyledLinearProgressDetails>
+          <p>{progressPercentages}%</p>
+          <p>Target of ${target.toFixed(2)}</p>
+        </StyledLinearProgressDetails>
+      </Box>
 
-            <StyledWrapperButtons>
-              <ButtonMoney
-                buttonContent={"Add money"}
-                dialogContent={"Add money to"}
-                target={pot.target}
-                calculateNewTotalAmount={(inputValue) => pot.total + inputValue}
-                potName={pot.name}
-              />
-              <ButtonMoney
-                buttonContent={"Withdraw"}
-                dialogContent={"Withdraw from "}
-                target={pot.target}
-                calculateNewTotalAmount={(inputValue) => pot.total - inputValue}
-                potName={pot.name}
-              />
-            </StyledWrapperButtons>
-          </StyledWrapperDetailsItem>
+      <StyledWrapperButtons>
+        <MoneyPotsDialog
+          buttonContent={"Add money"}
+          dialogTitle={"Add money to"}
+          target={target}
+          calculateNewTotalAmount={(inputValue) => total + inputValue}
+          handleSave={handleAddMoney}
+        />
+        <MoneyPotsDialog
+          buttonContent={"Withdraw"}
+          dialogTitle={"Withdraw from"}
+          target={target}
+          calculateNewTotalAmount={(inputValue) => total - inputValue}
+          handleSave={handleWithdrawMoney}
+        />
+      </StyledWrapperButtons>
+    </StyledWrapperDetailsItem>
+  );
+};
+
+export const Pots: FC = () => {
+  const dispatch = useDispatch();
+  const { pots } = useSelector((state: RootState) => state.data);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    newName: "",
+    newTarget: 0,
+    color: "",
+  });
+
+  const handleSave = () => {
+    dispatch(
+      addPot({
+        name: formData.newName,
+        target: formData.newTarget,
+        total: 0,
+        theme: formData.color,
+      })
+    );
+    setIsDialogOpen(false);
+    setFormData({ newName: "", newTarget: 0, color: "" });
+  };
+
+  return (
+    <StyledWrapper>
+      <div>
+        <Header title="Pot" onOpen={() => setIsDialogOpen(true)} />
+        <CustomDialog
+          open={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+          title="Add New Pot"
+          description="Create a Pot to set savings targets"
+          formData={formData}
+          onSave={setFormData}
+          onSaveButton={handleSave}
+        />
+      </div>
+      <StyledWrapperDetails>
+        {pots.map((pot) => (
+          <DetailsItemComponent
+            key={`${pot.target}-${pot.name}-${pot.theme}-${pot.total}`}
+            target={pot.target}
+            name={pot.name}
+            theme={pot.theme}
+            total={pot.total}
+          />
         ))}
       </StyledWrapperDetails>
     </StyledWrapper>
