@@ -45,6 +45,10 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
     color: theme,
   });
 
+  const [initialAmount, setInitialAmount] = useState(0);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [isWithdrawDialogOpen, setIsWithdrawDialogOpen] = useState(false);
+
   const handleAddMoney = (inputValue: number) => {
     dispatch(updatePotAmount({ name, newTotal: total + inputValue }));
   };
@@ -72,6 +76,21 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
   const progressPercentages = Math.round(
     target > 0 ? (total / target) * 100 : 0
   );
+
+  const handleAmountChange = (e) => {
+    const value = Math.max(0, Number(e.target.value));
+    setInitialAmount(value);
+  };
+
+  const handleAddDialogSave = (val: number) => {
+    handleAddMoney(val);
+    setIsAddDialogOpen(false);
+  };
+
+  const handleWithdrawDialogSave = (val: number) => {
+    handleWithdrawMoney(val);
+    setIsWithdrawDialogOpen(false);
+  };
 
   return (
     <StyledWrapperDetailsItem key={name}>
@@ -118,15 +137,26 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
           buttonContent={"Add money"}
           dialogTitle={"Add money to"}
           target={target}
-          calculateNewTotalAmount={(inputValue) => total + inputValue}
-          handleSave={handleAddMoney}
+          initialAmount={initialAmount}
+          calculateNewTotalAmount={(initialAmount) => total + initialAmount}
+          handleSave={handleAddDialogSave}
+          onInputChange={handleAmountChange}
+          isOpen={isAddDialogOpen}
+          onOpen={() => setIsAddDialogOpen(true)}
+          onClose={() => setIsAddDialogOpen(false)}
         />
+
         <MoneyPotsDialog
           buttonContent={"Withdraw"}
           dialogTitle={"Withdraw from"}
           target={target}
-          calculateNewTotalAmount={(inputValue) => total - inputValue}
-          handleSave={handleWithdrawMoney}
+          initialAmount={initialAmount}
+          calculateNewTotalAmount={(initialAmount) => total - initialAmount}
+          handleSave={handleWithdrawDialogSave}
+          onInputChange={handleAmountChange}
+          isOpen={isWithdrawDialogOpen}
+          onOpen={() => setIsWithdrawDialogOpen(true)}
+          onClose={() => setIsWithdrawDialogOpen(false)}
         />
       </StyledWrapperButtons>
     </StyledWrapperDetailsItem>

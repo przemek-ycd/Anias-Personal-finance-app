@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo } from "react";
+import React, { FC, useMemo } from "react";
 import {
   SectionHeaderDialog,
   SaveButton,
@@ -19,8 +19,13 @@ interface MoneyPotsDialogProps {
   buttonContent: string;
   dialogTitle: string;
   target: number;
-  calculateNewTotalAmount: (inputValue: number) => number;
-  handleSave: (inputValue: number) => void;
+  calculateNewTotalAmount: (initialAmount: number) => number;
+  handleSave: (initialAmount: number) => void;
+  onInputChange: (initialAmount: number) => void;
+  initialAmount: number;
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
 }
 
 export const MoneyPotsDialog: FC<MoneyPotsDialogProps> = ({
@@ -29,34 +34,30 @@ export const MoneyPotsDialog: FC<MoneyPotsDialogProps> = ({
   target,
   handleSave,
   calculateNewTotalAmount,
+  onInputChange,
+  initialAmount,
+  isOpen,
+  onOpen,
+  onClose,
 }) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [inputValue, setInputValue] = useState(0);
-
-  const newTotalAmount = calculateNewTotalAmount(inputValue);
+  const newTotalAmount = calculateNewTotalAmount(initialAmount);
 
   const progressAmount = useMemo(() => {
     return Math.round(target > 0 ? (newTotalAmount / target) * 100 : 0);
   }, [newTotalAmount, target]);
 
-  const handleTextChange = (e) => {
-    const value = Math.max(0, Number(e.target.value));
-    setInputValue(value);
-  };
-
   const handleSaveClick = () => {
-    handleSave(inputValue);
-    setIsDialogOpen(false);
+    handleSave(initialAmount);
   };
 
   return (
     <>
-      <button onClick={() => setIsDialogOpen(true)}>{buttonContent}</button>
-      <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
+      <button onClick={onOpen}>{buttonContent}</button>
+      <Dialog open={isOpen} onClose={onClose}>
         <DialogTitle>
           <SectionHeaderDialog>
             <h1>{dialogTitle} ‘Savings’</h1>
-            <button onClick={() => setIsDialogOpen(false)}>X</button>
+            <button onClick={onClose}>X</button>
           </SectionHeaderDialog>
         </DialogTitle>
         <DialogContent>
@@ -84,8 +85,8 @@ export const MoneyPotsDialog: FC<MoneyPotsDialogProps> = ({
             <TextFieldComponent
               label="Target Amount ($)"
               name="targetAmount"
-              value={inputValue}
-              onChange={handleTextChange}
+              value={initialAmount}
+              onChange={onInputChange}
               type="number"
             />
           </div>
