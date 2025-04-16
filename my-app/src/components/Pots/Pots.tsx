@@ -21,7 +21,10 @@ import {
   editPot,
   updatePotAmount,
 } from "../../store/data.ts";
-import { CustomDialog } from "../CustomDialog/CustomDialog.tsx";
+import {
+  MoneyManageDialog,
+  FormData,
+} from "../MoneyManageDialog/MoneyManageDialog.tsx";
 
 interface DetailsItemComponentProps {
   name: string;
@@ -39,11 +42,6 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
   const dispatch = useDispatch();
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    newName: name,
-    newTarget: target,
-    color: theme,
-  });
 
   const [initialAmount, setInitialAmount] = useState(0);
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -57,13 +55,17 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
     dispatch(updatePotAmount({ name, newTotal: total - inputValue }));
   };
 
-  const handleEditSubmit = () => {
+  const handleEditSubmit = (updatedData: {
+    newName: string;
+    newTarget: number;
+    color: string;
+  }) => {
     dispatch(
       editPot({
         name,
-        newName: formData.newName,
-        newTarget: formData.newTarget,
-        color: formData.color,
+        newName: updatedData.newName,
+        newTarget: updatedData.newTarget,
+        color: updatedData.color,
       })
     );
     setIsEditDialogOpen(false);
@@ -101,14 +103,17 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
           onEdit={() => setIsEditDialogOpen(true)}
           onDelete={() => handleRemovePot(name)}
         />
-        <CustomDialog
+        <MoneyManageDialog
           open={isEditDialogOpen}
           onClose={() => setIsEditDialogOpen(false)}
           title={`Edit Pot`}
           description={`If your saving targets change, feel free to update your Pots.`}
-          formData={formData}
-          onSave={setFormData}
-          onSaveButton={handleEditSubmit}
+          formData={{
+            newName: name,
+            newTarget: target,
+            color: theme,
+          }}
+          onSave={handleEditSubmit}
         />
       </div>
       <ItemTotalSaved>
@@ -167,37 +172,39 @@ export const Pots: FC = () => {
   const dispatch = useDispatch();
   const { pots } = useSelector((state: RootState) => state.data);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    newName: "",
-    newTarget: 0,
-    color: "",
-  });
 
-  const handleSave = () => {
+  const handleSave = (newPotData: {
+    newName: string;
+    newTarget: number;
+    color: string;
+  }) => {
     dispatch(
       addPot({
-        name: formData.newName,
-        target: formData.newTarget,
+        name: newPotData.newName,
+        target: newPotData.newTarget,
         total: 0,
-        theme: formData.color,
+        theme: newPotData.color,
       })
     );
+
     setIsDialogOpen(false);
-    setFormData({ newName: "", newTarget: 0, color: "" });
   };
 
   return (
     <StyledWrapper>
       <div>
         <Header title="Pot" onOpen={() => setIsDialogOpen(true)} />
-        <CustomDialog
+        <MoneyManageDialog
           open={isDialogOpen}
           onClose={() => setIsDialogOpen(false)}
           title="Add New Pot"
           description="Create a Pot to set savings targets"
-          formData={formData}
-          onSave={setFormData}
-          onSaveButton={handleSave}
+          formData={{
+            newName: "",
+            newTarget: 0,
+            color: "",
+          }}
+          onSave={handleSave}
         />
       </div>
       <StyledWrapperDetails>

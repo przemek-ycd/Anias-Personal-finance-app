@@ -1,9 +1,9 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   StyledWrapperDialog,
   SectionHeaderDialog,
   ButtonSave,
-} from "./CustomDialog.styles.js";
+} from "./MoneyManageDialog.styles.js";
 import { Dialog } from "@mui/material";
 import { FormControl } from "@mui/material";
 import { SelectDropdown } from "../SelectDropdown/SelectDropdown.tsx";
@@ -17,29 +17,43 @@ const colors = {
   Navy: "#826CB0",
 };
 
-interface CustomDialogProps {
+export interface FormData {
+  newName: string;
+  newTarget: number;
+  color: string;
+}
+
+interface MoneyManageDialogProps {
   open: boolean;
   onClose: () => void;
   title: string;
   description: string;
-  formData: {
-    newName: string;
-    newTarget: number;
-    color: string;
-  };
-  onSave: (data: any) => void;
-  onSaveButton: () => void;
+  formData: FormData;
+  onSave: (data: FormData) => void;
 }
 
-export const CustomDialog: FC<CustomDialogProps> = ({
+export const MoneyManageDialog: FC<MoneyManageDialogProps> = ({
   open,
   onClose,
   title,
   description,
-  formData,
+  formData: initialFormData,
   onSave,
-  onSaveButton,
 }) => {
+  const [formData, setFormData] = useState<FormData>(initialFormData);
+
+  const handleOnChange = (e, fieldName: keyof FormData) => {
+    setFormData({ ...formData, [fieldName]: e.target.value });
+  };
+
+  const handleSelectChange = (value: string, fieldName: keyof FormData) => {
+    setFormData((prev) => ({ ...prev, [fieldName]: value }));
+  };
+
+  const handleOnSave = () => {
+    onSave(formData);
+  };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <StyledWrapperDialog>
@@ -53,7 +67,7 @@ export const CustomDialog: FC<CustomDialogProps> = ({
             label={`${title} Name`}
             name="name"
             value={formData.newName}
-            onChange={(e) => onSave({ ...formData, newName: e.target.value })}
+            onChange={(e) => handleOnChange(e, "newName")}
             type="text"
           />
         </div>
@@ -62,9 +76,7 @@ export const CustomDialog: FC<CustomDialogProps> = ({
             label="Target Amount ($)"
             name="targetAmount"
             value={formData.newTarget}
-            onChange={(e) =>
-              onSave({ ...formData, newTarget: Number(e.target.value) })
-            }
+            onChange={(e) => handleOnChange(e, "newTarget")}
             type="number"
           />
         </div>
@@ -72,10 +84,10 @@ export const CustomDialog: FC<CustomDialogProps> = ({
           <SelectDropdown
             label="Theme Color"
             selectOptions={Object.keys(colors)}
-            onChange={(value) => onSave({ ...formData, color: value })}
+            onChange={(value) => handleSelectChange(value, "color")}
           />
         </FormControl>
-        <ButtonSave onClick={onSaveButton}>Save</ButtonSave>
+        <ButtonSave onClick={handleOnSave}>Save</ButtonSave>
       </StyledWrapperDialog>
     </Dialog>
   );

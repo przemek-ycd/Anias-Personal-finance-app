@@ -27,7 +27,7 @@ import {
 } from "../../utils/transactionsUtils.ts";
 import { useDispatch } from "react-redux";
 import { removeBudget, editBudget, addBudget } from "../../store/data.ts";
-import { CustomDialog } from "../CustomDialog/CustomDialog.tsx";
+import { MoneyManageDialog } from "../MoneyManageDialog/MoneyManageDialog.tsx";
 
 interface DetailsItemComponentProps {
   category: string;
@@ -88,7 +88,7 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
               onEdit={() => setIsEditDialogOpen(true)}
               onDelete={() => handleRemoveBudget(category)}
             />
-            <CustomDialog
+            <MoneyManageDialog
               open={isEditDialogOpen}
               onClose={() => setIsEditDialogOpen(false)}
               title={`Edit Budget`}
@@ -179,7 +179,7 @@ export const Budgets: FC = () => {
     <StyledWrapper>
       <div>
         <Header title="Budget" onOpen={() => setIsDialogOpen(true)} />
-        <CustomDialog
+        <MoneyManageDialog
           open={isDialogOpen}
           onClose={() => setIsDialogOpen(false)}
           title={`Add New Budget`}
