@@ -53,21 +53,20 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
   );
 
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    newName: category,
-    newTarget: maximum,
-    color: theme,
-  });
 
   const freeMoneyValue = maximum - spentMoneyValue;
 
-  const handleEditSubmit = () => {
+  const handleEditSubmit = (updatedData: {
+    newName: string;
+    newTarget: number;
+    color: string;
+  }) => {
     dispatch(
       editBudget({
         category,
-        newName: formData.newName,
-        newTarget: formData.newTarget,
-        color: formData.color,
+        newName: updatedData.newName,
+        newTarget: updatedData.newTarget,
+        color: updatedData.color,
       })
     );
     setIsEditDialogOpen(false);
@@ -93,9 +92,12 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
               onClose={() => setIsEditDialogOpen(false)}
               title={`Edit Budget`}
               description={`If your saving targets change, feel free to update your Budgets.`}
-              formData={formData}
-              onSave={setFormData}
-              onSaveButton={handleEditSubmit}
+              formData={{
+                newName: category,
+                newTarget: maximum,
+                color: theme,
+              }}
+              onSave={handleEditSubmit}
             />
           </div>
         </ItemHeader>
@@ -135,11 +137,6 @@ export const Budgets: FC = () => {
   const dataState = useSelector((state: RootState) => state.data);
   const { budgets } = dataState;
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [formData, setFormData] = useState({
-    newName: "",
-    newTarget: 0,
-    color: "",
-  });
 
   const maxLimitValue = budgets.map((budget) => Math.abs(budget.maximum));
   const roundedMaxLimitValue = maxLimitValue
@@ -163,16 +160,19 @@ export const Budgets: FC = () => {
     .reduce((sum, item) => sum + item.value, 0)
     .toFixed(2);
 
-  const handleSave = () => {
+  const handleSave = (newBudgetData: {
+    newName: string;
+    newTarget: number;
+    color: string;
+  }) => {
     dispatch(
       addBudget({
-        category: formData.newName,
-        maximum: formData.newTarget,
-        theme: formData.color,
+        category: newBudgetData.newName,
+        maximum: newBudgetData.newTarget,
+        theme: newBudgetData.color,
       })
     );
     setIsDialogOpen(false);
-    setFormData({ newName: "", newTarget: 0, color: "" });
   };
 
   return (
@@ -184,9 +184,8 @@ export const Budgets: FC = () => {
           onClose={() => setIsDialogOpen(false)}
           title={`Add New Budget`}
           description={`Create a Budget to set savings targets`}
-          formData={formData}
-          onSave={setFormData}
-          onSaveButton={handleSave}
+          formData={{}}
+          onSave={handleSave}
         />
       </div>
       <StyledWrapperDetails>

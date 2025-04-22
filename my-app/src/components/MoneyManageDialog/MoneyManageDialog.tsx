@@ -28,7 +28,7 @@ interface MoneyManageDialogProps {
   onClose: () => void;
   title: string;
   description: string;
-  formData: FormData;
+  formData: FormData | {};
   onSave: (data: FormData) => void;
 }
 
@@ -40,10 +40,10 @@ export const MoneyManageDialog: FC<MoneyManageDialogProps> = ({
   formData: initialFormData,
   onSave,
 }) => {
-  const [formData, setFormData] = useState<FormData>(initialFormData);
+  const [formData, setFormData] = useState<FormData | {}>(initialFormData);
 
   const handleOnChange = (e, fieldName: keyof FormData) => {
-    setFormData({ ...formData, [fieldName]: e.target.value });
+    setFormData((prev) => ({ ...prev, [fieldName]: e.target.value }));
   };
 
   const handleSelectChange = (value: string, fieldName: keyof FormData) => {
@@ -51,7 +51,7 @@ export const MoneyManageDialog: FC<MoneyManageDialogProps> = ({
   };
 
   const handleOnSave = () => {
-    onSave(formData);
+    onSave(formData as FormData);
   };
 
   return (
@@ -66,7 +66,7 @@ export const MoneyManageDialog: FC<MoneyManageDialogProps> = ({
           <TextFieldComponent
             label={`${title} Name`}
             name="name"
-            value={formData.newName}
+            value={(formData as FormData).newName}
             onChange={(e) => handleOnChange(e, "newName")}
             type="text"
           />
@@ -75,7 +75,7 @@ export const MoneyManageDialog: FC<MoneyManageDialogProps> = ({
           <TextFieldComponent
             label="Target Amount ($)"
             name="targetAmount"
-            value={formData.newTarget}
+            value={(formData as FormData).newTarget}
             onChange={(e) => handleOnChange(e, "newTarget")}
             type="number"
           />

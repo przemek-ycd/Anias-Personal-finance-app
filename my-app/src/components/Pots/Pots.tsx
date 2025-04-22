@@ -199,11 +199,7 @@ export const Pots: FC = () => {
           onClose={() => setIsDialogOpen(false)}
           title="Add New Pot"
           description="Create a Pot to set savings targets"
-          formData={{
-            newName: "",
-            newTarget: 0,
-            color: "",
-          }}
+          formData={{}}
           onSave={handleSave}
         />
       </div>
