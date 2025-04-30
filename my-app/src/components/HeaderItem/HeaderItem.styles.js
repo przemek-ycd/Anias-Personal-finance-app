@@ -21,14 +21,6 @@ export const SectionHeader = styled.div `
             margin-right: 0.5rem;
         }
     }
-
-    button {
-        background-color: transparent;
-        border: none;
-        transition: all 0.3s ease;
-        &:hover {
-            cursor: pointer;
-        }
     }
 `;
 
@@ -37,4 +29,5 @@ export const Dot = styled.div `
     height: 15px;
     border-radius: 50%;
     margin-right: 0.5rem;
+    background-color: ${(props) => props.theme}
 `;

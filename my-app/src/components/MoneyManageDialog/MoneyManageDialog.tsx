@@ -1,9 +1,9 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   StyledWrapperDialog,
   SectionHeaderDialog,
   ButtonSave,
-} from "./CustomDialog.styles.js";
+} from "./MoneyManageDialog.styles.js";
 import { Dialog } from "@mui/material";
 import { FormControl } from "@mui/material";
 import { SelectDropdown } from "../SelectDropdown/SelectDropdown.tsx";
@@ -17,29 +17,43 @@ const colors = {
   Navy: "#826CB0",
 };
 
-interface CustomDialogProps {
+export interface FormData {
+  newName: string;
+  newTarget: number;
+  color: string;
+}
+
+interface MoneyManageDialogProps {
   open: boolean;
   onClose: () => void;
   title: string;
   description: string;
-  formData: {
-    categoryName: string;
-    targetAmount: number;
-    themeColor: string;
-  };
-  onSave: (data: any) => void;
-  onSaveButton: () => void;
+  formData: FormData | {};
+  onSave: (data: FormData) => void;
 }
 
-export const CustomDialog: FC<CustomDialogProps> = ({
+export const MoneyManageDialog: FC<MoneyManageDialogProps> = ({
   open,
   onClose,
   title,
   description,
-  formData,
+  formData: initialFormData,
   onSave,
-  onSaveButton,
 }) => {
+  const [formData, setFormData] = useState<FormData | {}>(initialFormData);
+
+  const handleOnChange = (e, fieldName: keyof FormData) => {
+    setFormData((prev) => ({ ...prev, [fieldName]: e.target.value }));
+  };
+
+  const handleSelectChange = (value: string, fieldName: keyof FormData) => {
+    setFormData((prev) => ({ ...prev, [fieldName]: value }));
+  };
+
+  const handleOnSave = () => {
+    onSave(formData as FormData);
+  };
+
   return (
     <Dialog open={open} onClose={onClose}>
       <StyledWrapperDialog>
@@ -50,12 +64,10 @@ export const CustomDialog: FC<CustomDialogProps> = ({
         <p>{description}</p>
         <div>
           <TextFieldComponent
-            label="Budget Name"
+            label={`${title} Name`}
             name="name"
-            value={formData.categoryName}
-            onChange={(e) =>
-              onSave({ ...formData, categoryName: e.target.value })
-            }
+            value={(formData as FormData).newName}
+            onChange={(e) => handleOnChange(e, "newName")}
             type="text"
           />
         </div>
@@ -63,10 +75,8 @@ export const CustomDialog: FC<CustomDialogProps> = ({
           <TextFieldComponent
             label="Target Amount ($)"
             name="targetAmount"
-            value={formData.targetAmount}
-            onChange={(e) =>
-              onSave({ ...formData, targetAmount: Number(e.target.value) })
-            }
+            value={(formData as FormData).newTarget}
+            onChange={(e) => handleOnChange(e, "newTarget")}
             type="number"
           />
         </div>
@@ -74,10 +84,10 @@ export const CustomDialog: FC<CustomDialogProps> = ({
           <SelectDropdown
             label="Theme Color"
             selectOptions={Object.keys(colors)}
-            onChange={(value) => onSave({ ...formData, themeColor: value })}
+            onChange={(value) => handleSelectChange(value, "color")}
           />
         </FormControl>
-        <ButtonSave onClick={onSaveButton}>Save</ButtonSave>
+        <ButtonSave onClick={handleOnSave}>Save</ButtonSave>
       </StyledWrapperDialog>
     </Dialog>
   );

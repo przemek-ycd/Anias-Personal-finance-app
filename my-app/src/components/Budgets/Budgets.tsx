@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import {
   StyledWrapper,
   SectionHeader,
@@ -8,7 +8,6 @@ import {
   StyledWrapperDetailsItems,
   DetailsItem,
   ItemHeader,
-  Dot,
   Money,
   SpentMoney,
   FreeMoney,
@@ -26,6 +25,9 @@ import {
   getLastThreeTransactionsByCategory,
   calculateTotalSpentInLastThreeTransactions,
 } from "../../utils/transactionsUtils.ts";
+import { useDispatch } from "react-redux";
+import { removeBudget, editBudget, addBudget } from "../../store/data.ts";
+import { MoneyManageDialog } from "../MoneyManageDialog/MoneyManageDialog.tsx";
 
 interface DetailsItemComponentProps {
   category: string;
@@ -38,9 +40,8 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
   theme,
   maximum,
 }) => {
-  const { transactions, budgets } = useSelector(
-    (state: RootState) => state.data
-  );
+  const dispatch = useDispatch();
+  const { transactions } = useSelector((state: RootState) => state.data);
 
   const lastThreeTransactionsByCategory = getLastThreeTransactionsByCategory(
     transactions,
@@ -51,17 +52,54 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
     lastThreeTransactionsByCategory
   );
 
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+
   const freeMoneyValue = maximum - spentMoneyValue;
+
+  const handleEditSubmit = (updatedData: {
+    newName: string;
+    newTarget: number;
+    color: string;
+  }) => {
+    dispatch(
+      editBudget({
+        category,
+        newName: updatedData.newName,
+        newTarget: updatedData.newTarget,
+        color: updatedData.color,
+      })
+    );
+    setIsEditDialogOpen(false);
+  };
+
+  const handleRemoveBudget = (name: string) => {
+    dispatch(removeBudget(name));
+  };
 
   return (
     <>
       <DetailsItem>
         <ItemHeader>
-          <p>
-            <Dot theme={theme}></Dot>
-            {category}
-          </p>
-          <HeaderItem title="Budget" data={budgets} category={category} />
+          <div>
+            <HeaderItem
+              color={theme}
+              name={category}
+              onEdit={() => setIsEditDialogOpen(true)}
+              onDelete={() => handleRemoveBudget(category)}
+            />
+            <MoneyManageDialog
+              open={isEditDialogOpen}
+              onClose={() => setIsEditDialogOpen(false)}
+              title={`Edit Budget`}
+              description={`If your saving targets change, feel free to update your Budgets.`}
+              formData={{
+                newName: category,
+                newTarget: maximum,
+                color: theme,
+              }}
+              onSave={handleEditSubmit}
+            />
+          </div>
         </ItemHeader>
         <p>Maximum of ${maximum}</p>
         <LinearProgressBar
@@ -95,8 +133,10 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
 };
 
 export const Budgets: FC = () => {
+  const dispatch = useDispatch();
   const dataState = useSelector((state: RootState) => state.data);
   const { budgets } = dataState;
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const maxLimitValue = budgets.map((budget) => Math.abs(budget.maximum));
   const roundedMaxLimitValue = maxLimitValue
@@ -120,9 +160,34 @@ export const Budgets: FC = () => {
     .reduce((sum, item) => sum + item.value, 0)
     .toFixed(2);
 
+  const handleSave = (newBudgetData: {
+    newName: string;
+    newTarget: number;
+    color: string;
+  }) => {
+    dispatch(
+      addBudget({
+        category: newBudgetData.newName,
+        maximum: newBudgetData.newTarget,
+        theme: newBudgetData.color,
+      })
+    );
+    setIsDialogOpen(false);
+  };
+
   return (
     <StyledWrapper>
-      <Header title="Budget" />
+      <div>
+        <Header title="Budget" onOpen={() => setIsDialogOpen(true)} />
+        <MoneyManageDialog
+          open={isDialogOpen}
+          onClose={() => setIsDialogOpen(false)}
+          title={`Add New Budget`}
+          description={`Create a Budget to set savings targets`}
+          formData={{}}
+          onSave={handleSave}
+        />
+      </div>
       <StyledWrapperDetails>
         <StyledWrapperChart>
           <Chart chartData={chartData} />

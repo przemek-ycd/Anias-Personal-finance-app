@@ -18,11 +18,5 @@ export const SectionHeader = styled.div `
             background-color: #696868;
             cursor: pointer;
         }
-
-        svg {
-            width: 30px;
-            height: 30px;
-            padding-right: 1rem;
-        }
     }
 `;
