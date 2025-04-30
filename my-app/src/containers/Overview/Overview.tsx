@@ -84,8 +84,8 @@ export const Overview: FC = () => {
       );
 
       return {
-        name: budget.category,
-        value: spentMoneyValue,
+        category: budget.category,
+        spentMoneyValue: spentMoneyValue,
         color: budget.theme,
       };
     });

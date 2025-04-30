@@ -15,14 +15,15 @@ export const HeaderItem: FC<HeaderItemProps> = ({
   onEdit,
   onDelete,
 }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const open = Boolean(anchorEl);
 
-  const handleClick = () => {
-    setIsMenuOpen(true);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
-    setIsMenuOpen(false);
+    setAnchorEl(null);
   };
 
   return (
@@ -37,7 +38,7 @@ export const HeaderItem: FC<HeaderItemProps> = ({
           alt="Icon ellipsis"
         />
       </Button>
-      <Menu open={isMenuOpen} onClose={handleClose}>
+      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         <MenuItem onClick={onEdit}>Edit</MenuItem>
         <MenuItem onClick={onDelete}>Delete</MenuItem>
       </Menu>

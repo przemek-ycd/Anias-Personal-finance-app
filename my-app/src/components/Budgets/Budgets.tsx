@@ -150,14 +150,14 @@ export const Budgets: FC = () => {
     );
 
     return {
-      name: budget.category,
-      value: spentMoneyValue,
+      category: budget.category,
+      spentMoneyValue: spentMoneyValue,
       color: budget.theme,
     };
   });
 
   const totalValue = chartData
-    .reduce((sum, item) => sum + item.value, 0)
+    .reduce((sum, item) => sum + item.spentMoneyValue, 0)
     .toFixed(2);
 
   const handleSave = (newBudgetData: {
@@ -206,7 +206,6 @@ export const Budgets: FC = () => {
                     dataState,
                     budget.category
                   )}
-                  maximum={budget.maximum}
                 />
               ))}
             </div>

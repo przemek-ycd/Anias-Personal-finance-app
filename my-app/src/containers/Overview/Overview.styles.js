@@ -252,7 +252,7 @@ export const BillsInfoWrapper = styled.div `
 export const BudgetAmountWrapper = styled.div `
     display: flex;
 
-    @media (max-width: 990px) {
+    @media (max-width: 1250px) {
         flex-direction: column;
     }
 `;

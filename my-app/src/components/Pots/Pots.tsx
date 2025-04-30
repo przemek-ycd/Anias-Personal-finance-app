@@ -133,7 +133,7 @@ const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
         />
         <StyledLinearProgressDetails>
           <p>{progressPercentages}%</p>
-          <p>Target of ${target.toFixed(2)}</p>
+          <p>Target of ${Number(target).toFixed(2)}</p>
         </StyledLinearProgressDetails>
       </Box>
 
