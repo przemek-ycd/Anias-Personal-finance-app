@@ -36,18 +36,18 @@ import { Link, Routes, Route } from "react-router-dom";
 interface SectionHeaderItemProps {
   title: string;
   buttonText: string;
-  onClick: string;
+  path: string;
 }
 
 const SectionHeaderItem: FC<SectionHeaderItemProps> = ({
   title,
   buttonText,
-  onClick,
+  path,
 }) => {
   return (
     <SectionHeader>
       <h3>{title}</h3>
-      <Link to={onClick}>
+      <Link to={path}>
         {buttonText}
         <img
           src={`${process.env.PUBLIC_URL}/images/icon-caret-right.svg`}
@@ -82,7 +82,7 @@ export const Overview: FC = () => {
 
       return {
         category: budget.category,
-        spentMoneyValue: spentMoneyValue,
+        spentMoneyValue,
         color: budget.theme,
       };
     });
@@ -112,7 +112,7 @@ export const Overview: FC = () => {
             <SectionHeaderItem
               title="Pots"
               buttonText="See details"
-              onClick="/pots"
+              path="/pots"
             />
             <StyledWrapperPotsSummary>
               <StyledWrapperTotalSaved>
@@ -144,7 +144,7 @@ export const Overview: FC = () => {
             <SectionHeaderItem
               title={"Transactions"}
               buttonText={"View all"}
-              onClick="/transactions"
+              path="/transactions"
             />
             <TransactionTable filteredTransactions={transactionsSlice} />
           </StyledWrapperTransactionsSection>
@@ -154,7 +154,7 @@ export const Overview: FC = () => {
             <SectionHeaderItem
               title={"Budgets"}
               buttonText={"View all"}
-              onClick="/budgets"
+              path="/budgets"
             />
             <BudgetAmountWrapper>
               <Chart chartData={chartData} />
@@ -178,7 +178,7 @@ export const Overview: FC = () => {
             <SectionHeaderItem
               title={"Recurring Bills"}
               buttonText={"View all"}
-              onClick="/recurringBills"
+              path="/recurringBills"
             />
             <BillsInfoWrapper>
               {summaryItemsRecurringBillsData.map((item) => (

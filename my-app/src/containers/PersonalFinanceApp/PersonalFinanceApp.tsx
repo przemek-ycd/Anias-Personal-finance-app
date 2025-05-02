@@ -66,7 +66,7 @@ const PersonalFinanceApp = () => {
       <StyledWrapper>
         <StyledDrawer variant="persistent" anchor="left" open={open}>
           <StyledWrapperTypography>
-            {open ? <LogoImg size={"large"} /> : <LogoImg size={"small"} />}
+            <LogoImg size={open ? "large" : "small"} />
           </StyledWrapperTypography>
 
           <StyledWrapperList>
