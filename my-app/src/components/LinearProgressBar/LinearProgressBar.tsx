@@ -18,10 +18,9 @@ export const LinearProgressBar: FC<LinearProgressBarProps> = ({
   value,
 }) => {
   return (
-    <ProgressBarContainer>
+    <ProgressBarContainer height={height}>
       <StyledLinearProgress
         variant="determinate"
-        height={height}
         backgroundColor={backgroundColor}
         border={border}
         value={value}

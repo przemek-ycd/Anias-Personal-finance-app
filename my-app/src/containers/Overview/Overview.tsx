@@ -1,4 +1,4 @@
-import React, { FC, useState, useMemo } from "react";
+import React, { FC, useMemo } from "react";
 import {
   StyledWrapper,
   StyledWrapperSummary,
@@ -23,45 +23,38 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/store.ts";
 import { TransactionTable } from "../../components/TransactionTable/TransactionTable.tsx";
 import { Chart, ChartItems } from "../../components/Chart/Chart.tsx";
-import { Budgets } from "../../components/Budgets/Budgets.tsx";
-import { Transactions } from "../../components/Transactions/Transactions.tsx";
-import { RecurringBills } from "../../components/RecurringBills/RecurringBills.tsx";
-import { Pots } from "../../components/Pots/Pots.tsx";
 import {
   calculateTotalSpentInCategory,
   getSummaryRecurringBillsData,
 } from "../../utils/transactionsUtils.ts";
+import { Link } from "react-router-dom";
 
 interface SectionHeaderItemProps {
   title: string;
   buttonText: string;
-  onClick: () => void;
+  path: string;
 }
 
 const SectionHeaderItem: FC<SectionHeaderItemProps> = ({
   title,
   buttonText,
-  onClick,
+  path,
 }) => {
   return (
     <SectionHeader>
       <h3>{title}</h3>
-      <button onClick={onClick}>
+      <Link to={path}>
         {buttonText}
         <img
           src={`${process.env.PUBLIC_URL}/images/icon-caret-right.svg`}
           alt="Icon caret right"
         />
-      </button>
+      </Link>
     </SectionHeader>
   );
 };
 
 export const Overview: FC = () => {
-  const [activeView, setActiveView] = useState<
-    "overview" | "pots" | "transactions" | "budgets" | "recurringBills"
-  >("overview");
-
   const { balance, transactions, budgets, pots, isLoading, isError } =
     useSelector((state: RootState) => state.data);
 
@@ -84,8 +77,8 @@ export const Overview: FC = () => {
       );
 
       return {
-        name: budget.category,
-        value: spentMoneyValue,
+        category: budget.category,
+        spentMoneyValue,
         color: budget.theme,
       };
     });
@@ -97,11 +90,6 @@ export const Overview: FC = () => {
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error loading data.</p>;
-
-  if (activeView === "pots") return <Pots />;
-  if (activeView === "transactions") return <Transactions />;
-  if (activeView === "budgets") return <Budgets />;
-  if (activeView === "recurringBills") return <RecurringBills />;
 
   return (
     <StyledWrapper>
@@ -120,7 +108,7 @@ export const Overview: FC = () => {
             <SectionHeaderItem
               title="Pots"
               buttonText="See details"
-              onClick={() => setActiveView("pots")}
+              path="/pots"
             />
             <StyledWrapperPotsSummary>
               <StyledWrapperTotalSaved>
@@ -152,7 +140,7 @@ export const Overview: FC = () => {
             <SectionHeaderItem
               title={"Transactions"}
               buttonText={"View all"}
-              onClick={() => setActiveView("transactions")}
+              path="/transactions"
             />
             <TransactionTable filteredTransactions={transactionsSlice} />
           </StyledWrapperTransactionsSection>
@@ -162,7 +150,7 @@ export const Overview: FC = () => {
             <SectionHeaderItem
               title={"Budgets"}
               buttonText={"View all"}
-              onClick={() => setActiveView("budgets")}
+              path="/budgets"
             />
             <BudgetAmountWrapper>
               <Chart chartData={chartData} />
@@ -186,7 +174,7 @@ export const Overview: FC = () => {
             <SectionHeaderItem
               title={"Recurring Bills"}
               buttonText={"View all"}
-              onClick={() => setActiveView("recurringBills")}
+              path="/recurringBills"
             />
             <BillsInfoWrapper>
               {summaryItemsRecurringBillsData.map((item) => (

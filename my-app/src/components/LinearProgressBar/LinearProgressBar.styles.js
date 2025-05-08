@@ -5,6 +5,11 @@ export const ProgressBarContainer = styled(Box)`
   width: 100%;
   margin-right: 2rem;
   margin-top: 1rem;
+  
+  & .MuiLinearProgress-root {
+    height: ${(props) => props.height};
+    background-color: rgb(241, 239, 236);
+  }
 `;
 
 export const StyledLinearProgress = styled(LinearProgress)`

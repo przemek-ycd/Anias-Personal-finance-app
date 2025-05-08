@@ -106,10 +106,11 @@ export const SectionHeader = styled.div `
     justify-content: space-between;
     padding-bottom: 0.8rem;
 
-    button {
+    a {
         border: none;
         background-color: transparent;
         color: #696868;
+        text-decoration: none;
         transition: all 0.3s ease;
         &:hover {
             color: black;
@@ -252,7 +253,7 @@ export const BillsInfoWrapper = styled.div `
 export const BudgetAmountWrapper = styled.div `
     display: flex;
 
-    @media (max-width: 990px) {
+    @media (max-width: 1250px) {
         flex-direction: column;
     }
 `;

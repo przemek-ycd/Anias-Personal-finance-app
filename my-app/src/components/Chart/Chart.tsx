@@ -33,8 +33,8 @@ export const Chart: React.FC<ChartProps> = ({ chartData }) => {
       <PieChart>
         <Pie
           data={chartData}
-          dataKey="value"
-          nameKey="name"
+          dataKey="spentMoneyValue"
+          nameKey="category"
           cx="50%"
           cy="50%"
           outerRadius={100}

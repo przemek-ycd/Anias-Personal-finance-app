@@ -13,6 +13,7 @@ import { Transactions } from "../../components/Transactions/Transactions.tsx";
 import { RecurringBills } from "../../components/RecurringBills/RecurringBills.tsx";
 import { Overview } from "../Overview/Overview.tsx";
 import { Pots } from "../../components/Pots/Pots.tsx";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
 const menuItems = {
   overview: {
@@ -53,81 +54,67 @@ const IconCaretImg = ({ direction }) => (
   />
 );
 
-type SelectedComponent =
-  | "overview"
-  | "transactions"
-  | "budgets"
-  | "pots"
-  | "recurringBills";
-
 const PersonalFinanceApp = () => {
   const [open, setOpen] = useState(true);
-  const [selectedComponent, setSelectedComponent] =
-    useState<SelectedComponent>("overview");
 
   const toggleMenu = () => {
     setOpen((prevOpen) => !prevOpen);
   };
 
-  const handleItemClick = (component: string) => {
-    setSelectedComponent(component);
-  };
-
-  const components = {
-    overview: Overview,
-    pots: Pots,
-    budgets: Budgets,
-    transactions: Transactions,
-    recurringBills: RecurringBills,
-  };
-
-  const SelectedComponent = selectedComponent
-    ? components[selectedComponent]
-    : null;
-
   return (
-    <StyledWrapper>
-      <StyledDrawer variant="persistent" anchor="left" open={open}>
-        <StyledWrapperTypography>
-          {open ? <LogoImg size={"large"} /> : <LogoImg size={"small"} />}
-        </StyledWrapperTypography>
+    <Router>
+      <StyledWrapper>
+        <StyledDrawer variant="persistent" anchor="left" open={open}>
+          <StyledWrapperTypography>
+            <LogoImg size={open ? "large" : "small"} />
+          </StyledWrapperTypography>
 
-        <StyledWrapperList>
-          {Object.keys(menuItems).map((key) => {
-            const { text, image, description } = menuItems[key];
-            return (
-              <div key={key}>
-                <button onClick={() => handleItemClick(key)}>
-                  <img
-                    src={`${process.env.PUBLIC_URL}/images/${image}.svg`}
-                    alt={description}
-                    style={{ width: 24, height: 24 }}
-                  />
-                  {open && <p>{text}</p>}
-                </button>
-              </div>
-            );
-          })}
-        </StyledWrapperList>
+          <StyledWrapperList>
+            {Object.keys(menuItems).map((key) => {
+              const { text, image, description } = menuItems[key];
+              return (
+                <div key={key}>
+                  <Link to={`/${key}`}>
+                    <button>
+                      <img
+                        src={`${process.env.PUBLIC_URL}/images/${image}.svg`}
+                        alt={description}
+                        style={{ width: 24, height: 24 }}
+                      />
+                      {open && <p>{text}</p>}
+                    </button>
+                  </Link>
+                </div>
+              );
+            })}
+          </StyledWrapperList>
 
-        <StyledIconButton onClick={toggleMenu}>
-          {open ? (
-            <ButtonMinimizeMenu>
-              <IconCaretImg direction={"left"} />
-              Minimize Menu
-            </ButtonMinimizeMenu>
-          ) : (
-            <ButtonMinimizeMenu>
-              <IconCaretImg direction={"right"} />
-            </ButtonMinimizeMenu>
-          )}
-        </StyledIconButton>
-      </StyledDrawer>
+          <StyledIconButton onClick={toggleMenu}>
+            {open ? (
+              <ButtonMinimizeMenu>
+                <IconCaretImg direction={"left"} />
+                Minimize Menu
+              </ButtonMinimizeMenu>
+            ) : (
+              <ButtonMinimizeMenu>
+                <IconCaretImg direction={"right"} />
+              </ButtonMinimizeMenu>
+            )}
+          </StyledIconButton>
+        </StyledDrawer>
 
-      <ContentWrapper open={open}>
-        <SelectedComponent />
-      </ContentWrapper>
-    </StyledWrapper>
+        <ContentWrapper open={open}>
+          <Routes>
+            <Route path="/overview" element={<Overview />} />
+            <Route path="/pots" element={<Pots />} />
+            <Route path="/budgets" element={<Budgets />} />
+            <Route path="/transactions" element={<Transactions />} />
+            <Route path="/recurringBills" element={<RecurringBills />} />
+            <Route path="/*" element={<div>Page not found</div>} />
+          </Routes>
+        </ContentWrapper>
+      </StyledWrapper>
+    </Router>
   );
 };
 

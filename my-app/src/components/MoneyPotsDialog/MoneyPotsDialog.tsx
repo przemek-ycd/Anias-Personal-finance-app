@@ -21,7 +21,7 @@ interface MoneyPotsDialogProps {
   target: number;
   calculateNewTotalAmount: (initialAmount: number) => number;
   handleSave: (initialAmount: number) => void;
-  onInputChange: (initialAmount: number) => void;
+  onInputChange: React.ChangeEventHandler<HTMLInputElement>;
   initialAmount: number;
   isOpen: boolean;
   onOpen: () => void;
@@ -79,7 +79,7 @@ export const MoneyPotsDialog: FC<MoneyPotsDialogProps> = ({
           </div>
           <StyledLinearProgressDetails>
             <p>{progressAmount}%</p>
-            <p>Target of ${target.toFixed(2)}</p>
+            <p>Target of ${Number(target).toFixed(2)}</p>
           </StyledLinearProgressDetails>
           <div>
             <TextFieldComponent
