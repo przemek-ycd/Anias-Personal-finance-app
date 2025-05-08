@@ -35,7 +35,7 @@ interface DetailsItemComponentProps {
   maximum: number;
 }
 
-const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
+export const DetailsItemComponent: FC<DetailsItemComponentProps> = ({
   category,
   theme,
   maximum,

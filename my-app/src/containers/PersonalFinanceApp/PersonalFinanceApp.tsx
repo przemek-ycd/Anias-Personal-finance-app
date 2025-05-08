@@ -89,7 +89,10 @@ const PersonalFinanceApp = () => {
             })}
           </StyledWrapperList>
 
-          <StyledIconButton onClick={toggleMenu}>
+          <StyledIconButton
+            onClick={toggleMenu}
+            aria-label="menu-toggle-button"
+          >
             {open ? (
               <ButtonMinimizeMenu>
                 <IconCaretImg direction={"left"} />
