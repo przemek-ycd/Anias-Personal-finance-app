@@ -110,6 +110,7 @@ const PersonalFinanceApp = () => {
             <Route path="/budgets" element={<Budgets />} />
             <Route path="/transactions" element={<Transactions />} />
             <Route path="/recurringBills" element={<RecurringBills />} />
+            <Route path="/*" element={<div>Page not found</div>} />
           </Routes>
         </ContentWrapper>
       </StyledWrapper>

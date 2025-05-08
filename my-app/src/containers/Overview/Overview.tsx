@@ -23,15 +23,11 @@ import { useSelector } from "react-redux";
 import { RootState } from "../../store/store.ts";
 import { TransactionTable } from "../../components/TransactionTable/TransactionTable.tsx";
 import { Chart, ChartItems } from "../../components/Chart/Chart.tsx";
-import { Budgets } from "../../components/Budgets/Budgets.tsx";
-import { Transactions } from "../../components/Transactions/Transactions.tsx";
-import { RecurringBills } from "../../components/RecurringBills/RecurringBills.tsx";
-import { Pots } from "../../components/Pots/Pots.tsx";
 import {
   calculateTotalSpentInCategory,
   getSummaryRecurringBillsData,
 } from "../../utils/transactionsUtils.ts";
-import { Link, Routes, Route } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface SectionHeaderItemProps {
   title: string;
@@ -191,12 +187,6 @@ export const Overview: FC = () => {
           </StyledWrapperBillsSection>
         </StyledRightSide>
       </StyledWrapperDetails>
-      <Routes>
-        <Route path="/pots" element={<Pots />} />
-        <Route path="/transactions" element={<Transactions />} />
-        <Route path="/budgets" element={<Budgets />} />
-        <Route path="/recurringBills" element={<RecurringBills />} />
-      </Routes>
     </StyledWrapper>
   );
 };
