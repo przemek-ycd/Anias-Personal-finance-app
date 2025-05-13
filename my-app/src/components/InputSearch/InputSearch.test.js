@@ -20,7 +20,9 @@ describe("InputSearch Component", () => {
         render(<InputSearch searchTerm="Test Value" onChange={mockOnChange} />);
         const input = screen.getByLabelText(/search/i);
 
-        fireEvent.click(input);
-        expect(mockOnChange).not.toHaveBeenCalledWith(0);
+        fireEvent.change(input, { target: { value: "New value" } });
+
+        expect(mockOnChange).toHaveBeenCalledTimes(1);
+        expect(mockOnChange).toHaveBeenCalledWith("New value");
     });
 });

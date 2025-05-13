@@ -20,10 +20,11 @@ describe("PersonalFinanceApp", () => {
       </Provider>
     );
 
-    expect(screen.getByText("Overview")).toBeInTheDocument();
-    expect(screen.getByText("Budgets")).toBeInTheDocument();
-    expect(screen.getByText("Pots")).toBeInTheDocument();
-    expect(screen.getByText("Recurring Bills")).toBeInTheDocument();
+    expect(screen.getByTestId("menu-item-overview")).toBeInTheDocument();
+    expect(screen.getByTestId("menu-item-budgets")).toBeInTheDocument();
+    expect(screen.getByTestId("menu-item-pots")).toBeInTheDocument();
+    expect(screen.getByTestId("menu-item-transactions")).toBeInTheDocument();
+    expect(screen.getByTestId("menu-item-recurringBills")).toBeInTheDocument();
   });
 
   test("handle button click", () => {

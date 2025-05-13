@@ -75,7 +75,7 @@ const PersonalFinanceApp = () => {
               return (
                 <div key={key}>
                   <Link to={`/${key}`}>
-                    <button>
+                    <button data-testid={`menu-item-${key}`}>
                       <img
                         src={`${process.env.PUBLIC_URL}/images/${image}.svg`}
                         alt={description}

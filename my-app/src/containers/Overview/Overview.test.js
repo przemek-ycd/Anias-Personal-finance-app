@@ -5,6 +5,7 @@ import { MemoryRouter } from "react-router-dom";
 import configureStore from "redux-mock-store";
 import {Overview} from "./Overview";
 
+// This is required by Recharts
 global.ResizeObserver = class ResizeObserver {
   observe() {}
   unobserve() {}

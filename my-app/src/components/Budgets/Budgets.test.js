@@ -6,6 +6,7 @@ import configureStore from "redux-mock-store";
 
 const mockStore = configureStore([]);
 
+// This is required by Recharts
 global.ResizeObserver = class {
   observe() {}
   unobserve() {}
