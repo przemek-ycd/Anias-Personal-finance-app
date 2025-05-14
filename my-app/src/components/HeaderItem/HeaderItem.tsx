@@ -45,3 +45,5 @@ export const HeaderItem: FC<HeaderItemProps> = ({
     </SectionHeader>
   );
 };
+
+export default HeaderItem;

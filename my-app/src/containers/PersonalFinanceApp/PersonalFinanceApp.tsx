@@ -75,7 +75,7 @@ const PersonalFinanceApp = () => {
               return (
                 <div key={key}>
                   <Link to={`/${key}`}>
-                    <button>
+                    <button data-testid={`menu-item-${key}`}>
                       <img
                         src={`${process.env.PUBLIC_URL}/images/${image}.svg`}
                         alt={description}
@@ -89,7 +89,10 @@ const PersonalFinanceApp = () => {
             })}
           </StyledWrapperList>
 
-          <StyledIconButton onClick={toggleMenu}>
+          <StyledIconButton
+            onClick={toggleMenu}
+            aria-label="menu-toggle-button"
+          >
             {open ? (
               <ButtonMinimizeMenu>
                 <IconCaretImg direction={"left"} />
