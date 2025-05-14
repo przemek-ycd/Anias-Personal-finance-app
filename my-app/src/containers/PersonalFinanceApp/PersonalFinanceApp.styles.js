@@ -150,3 +150,16 @@ export const StyledIconButton = styled(IconButton)`
     margin-top: 2rem;
 `
 ;
+
+export const StyledWrapperNews = styled.div `
+    display: flex;
+    position: fixed;
+    top: auto;
+    bottom: 0;
+    height: 40;
+    width: 100%;
+    overflow: hidden;
+    align-items: center;
+    background-color: #fff;
+    border-top: 1px solid rgb(241, 239, 236);
+`;

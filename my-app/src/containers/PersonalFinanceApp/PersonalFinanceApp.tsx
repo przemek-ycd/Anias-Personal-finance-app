@@ -7,6 +7,7 @@ import {
   StyledDrawer,
   ContentWrapper,
   StyledIconButton,
+  StyledWrapperNews,
 } from "./PersonalFinanceApp.styles.js";
 import { Budgets } from "../../components/Budgets/Budgets.tsx";
 import { Transactions } from "../../components/Transactions/Transactions.tsx";
@@ -14,6 +15,7 @@ import { RecurringBills } from "../../components/RecurringBills/RecurringBills.t
 import { Overview } from "../Overview/Overview.tsx";
 import { Pots } from "../../components/Pots/Pots.tsx";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { NewsTicker } from "../../components/NewsTicker/NewsTicker.tsx";
 
 const menuItems = {
   overview: {
@@ -116,6 +118,9 @@ const PersonalFinanceApp = () => {
             <Route path="/*" element={<div>Page not found</div>} />
           </Routes>
         </ContentWrapper>
+        <StyledWrapperNews>
+          <NewsTicker></NewsTicker>
+        </StyledWrapperNews>
       </StyledWrapper>
     </Router>
   );
