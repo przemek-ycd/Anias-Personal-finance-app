@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useMemo } from "react";
 import { StyledWrapper } from "./NewsTicker.styles.js";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchNews } from "../../store/news.ts";
@@ -12,19 +12,26 @@ export const NewsTicker: FC = () => {
     dispatch(fetchNews());
   }, [dispatch]);
 
-  const formatDate = (date: number): string => {
-    const parsedDate = new Date(date * 1000);
-    const getFullYear = parsedDate.getFullYear();
-    const getMonth = String(parsedDate.getMonth() + 1).padStart(2, "0");
-    const getDay = String(parsedDate.getDate()).padStart(2, "0");
-    return getDay + "/" + getMonth + "/" + getFullYear;
-  };
+  const formattedNews = useMemo(() => {
+    return news.map((item) => {
+      const parsedDate = new Date(item.datetime * 1000);
+      const getFullYear = parsedDate.getFullYear();
+      const getMonth = String(parsedDate.getMonth() + 1).padStart(2, "0");
+      const getDay = String(parsedDate.getDate()).padStart(2, "0");
+      const formattedDate = `${getDay}/${getMonth}/${getFullYear}`;
+
+      return {
+        ...item,
+        formattedDate,
+      };
+    });
+  }, [news]);
 
   return (
     <StyledWrapper>
-      {news.map((item) => (
-        <div key={item.id}>
-          <p>{formatDate(item.datetime)}: </p>
+      {formattedNews.map((item) => (
+        <div key={`${item.datetime}-${item.headline}`}>
+          <p>{item.formattedDate}: </p>
           <p>{item.headline}</p>
         </div>
       ))}

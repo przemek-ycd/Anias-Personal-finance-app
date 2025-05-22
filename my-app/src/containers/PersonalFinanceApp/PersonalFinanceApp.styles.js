@@ -154,7 +154,6 @@ export const StyledIconButton = styled(IconButton)`
 export const StyledWrapperNews = styled.div `
     display: flex;
     position: fixed;
-    top: auto;
     bottom: 0;
     height: 40;
     width: 100%;

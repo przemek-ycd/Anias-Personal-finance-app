@@ -119,7 +119,7 @@ const PersonalFinanceApp = () => {
           </Routes>
         </ContentWrapper>
         <StyledWrapperNews>
-          <NewsTicker></NewsTicker>
+          <NewsTicker />
         </StyledWrapperNews>
       </StyledWrapper>
     </Router>
