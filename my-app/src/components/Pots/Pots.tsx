@@ -23,7 +23,6 @@ import {
 } from "../../store/data.ts";
 import {
   MoneyManageDialog,
-  FormData,
 } from "../MoneyManageDialog/MoneyManageDialog.tsx";
 
 interface DetailsItemComponentProps {
