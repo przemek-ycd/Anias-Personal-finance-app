@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { ResponsiveContainer } from "recharts";
 
 export const StyledWrapperChartItems = styled.div `
     display: flex;
